@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Проект "Система Контроля" по работе со строительными компаниями
+Является веб-приложением для централизованного управления дефектами на строительных объектах. Система обеспечивает полный цикл работы: от регистрации дефекта и назначения исполнителя до контроля статусов и формирования отчётности для руководства.
 
-## Getting Started
+> ### Использованные технологии 
+> Next.JS
+> TypeScript
+> TailwindCSS
+> Python
+> FastAPI
+> SQLAlchemy
+> PostgreSQL
+> MinIO
+> Docker
+> Docker Compose
+---
 
-First, run the development server:
+## Функционал
+1. Регистрация пользователей и аутентификация.
+2. Разграничение прав доступа посредством привилегий.
+3. Управление проектами/объектами и их этапами.
+4. Создание и редактирование дефектов (заголовок, описание, приоритет, исполнитель, сроки, вложения).
+5. Хранение и управление статусами дефектов: Новая → В работе → На проверке → Закрыта/Отменена.
+6. Ведение истории изменений дефектов.
+7. Поиск, сортировка и фильтрация дефектов.
+8. Экспорт отчётности в CSV/Excel.
+9. Просмотр аналитических отчётов (графики, статистика).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+ 
+ ## Основные роли
+ 1. **Инженеры**: Регистрация/исправление дефектов, обновление инфо о дефектах, добавление и редактирование объектов.
+ 2. **Менеджеры**: Назначение задач по исправлению дефектов, формирование отчетов.
+ 3. **Руководители и заказчики**: Просмотр прогресса, отчетности.
+
+### Use Case диаграмма
+![Use Case](./images/UseCase.jpg)
+
+## Архитектура стеков
+[Frontend часть](./frontend/README.md)
+```mermaid
+architecture-beta
+
+service internet(internet)[Internet]
+service proxy(internet)[Traefik]
+service db(database)[Postgres]
+service minio(database)[MinIO]
+service backendServer(server)[Backend FastAPI]
+service frontendServer(server)[Frontend NextJS]
+
+internet:R <--> L:proxy
+proxy:R <--> L:backendServer
+proxy:R <--> L:frontendServer
+proxy:R <--> L:minio
+backendServer:R <--> L:db
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Архитектура базы данных
+![Database architecture](./images/db_schema.png)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Страницы
+1. **Страница авторизации**
+   Просто форма почта+пароль с возможность зайти/зарегистрироваться.
+2. **Страница организаций**
+   Список организаций, куда добавлен пользовать, присутствует возможность добавить создать новую организацию. Иначе - форма для создания организации.
+3.  **Страница объектов**
+    Список объектов организации с возможностью добавлений новых. Иначе - форма для добавления объекта.
+4. **Страница дефектов**
+   Список дефектов с возможностью фильтрации по объектам, статусам, ответственных, срокам. Иначе - форма для добавления.
+5. **Страница дефекта**
+   Подробная информация о дефекте с фото. Есть возможность отредактировать/исправить данный дефект, если есть такая привилегия. Добавить просмотр истории изменений.
+6. **Страница аналитики**
+   Диаграммы и показатели статистики решений дефектов с возможность фильтрации по датам, объектам и ответственным. Присутствуют кнопки экспорта аналитических отчетов в CSV/Excel.

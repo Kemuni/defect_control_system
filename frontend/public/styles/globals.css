@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme {
+  --color-black: #000;
+  --color-white: #fff;
+  --color-background: #E7E7E7;
+  --color-dark-background: #243037;
+  --color-light-background: #EFEFEF;
+  --color-hint: #A0A0A0;
+  --color-secondary-hint: #3C3C3C;
+
+  --color-green-accent: #2FC91E;
+  --color-red-accent: #C91E21;
+  --color-orange-accent: #F79813;
+  --color-blue-accent: #138DF7;
+
+  /* Figma: Subheadline */
+  --text-sm: 0.938rem;
+  --text-sm--line-height: 19px;
+  /* Figma: Text */
+  --text-base: 1rem;
+  --text-base--line-height: 1.25rem;
+  /* Figma: Headline */
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 25px;
+  /* Figma: Title 4 */
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 25px;
+  /* Figma: Title 3 */
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 29px;
+  /* Figma: Title 2 */
+  --text-3xl: 1.75rem;
+  --text-3xl--line-height: 2.125rem;
+  /* Figma: Title 1 */
+  --text-4xl: 2rem;
+  --text-4xl--line-height: 2.5rem;
+  /* Figma: Large title (Logo) */
+  --text-5xl: 2.5rem;
+  --text-5xl--line-height: 3rem;
+}
