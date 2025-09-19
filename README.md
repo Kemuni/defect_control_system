@@ -1,17 +1,20 @@
 # Проект "Система Контроля" по работе со строительными компаниями
 Является веб-приложением для централизованного управления дефектами на строительных объектах. Система обеспечивает полный цикл работы: от регистрации дефекта и назначения исполнителя до контроля статусов и формирования отчётности для руководства.
 
-> ### Использованные технологии 
-> Next.JS
-> TypeScript
-> TailwindCSS
-> Python
-> FastAPI
-> SQLAlchemy
-> PostgreSQL
-> MinIO
-> Docker
-> Docker Compose
+> ### Использованные технологии
+> Frontend:
+> [![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=fff)](https://www.npmjs.com/)
+> [![Next.js](https://img.shields.io/badge/Next.js-black?logo=next.js&logoColor=white)](https://nextjs.org/)
+> [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](https://www.typescriptlang.org/)
+> [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+> <br/>Backend: 
+> [![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff)](https://www.python.org/)
+> [![FastAPI](https://img.shields.io/badge/FastAPI-009485.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+> [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-%23D71F00.svg?logo=sqlalchemy&logoColor=white)](https://fastapi.tiangolo.com/)
+> [![Postgres](https://img.shields.io/badge/Postgres-%23316192.svg?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+> <br/>Architecture: 
+> [![MinIO](https://img.shields.io/badge/MinIO-%23C72E49.svg?logo=minio&logoColor=white)](https://www.min.io/)
+> [![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff)](https://www.docker.com/)
 ---
 
 ## Функционал
