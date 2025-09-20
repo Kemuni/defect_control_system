@@ -7,6 +7,7 @@ import DefectIcon from "@/components/icons/DefectIcon";
 import ObjectsIcon from "@/components/icons/ObjectsIcon";
 import {FC} from "react";
 import RepairIcon from "@/components/icons/RepairIcon";
+import Input from "@/components/Input";
 
 export default function Home() {
   return (
@@ -14,21 +15,19 @@ export default function Home() {
       <div className="flex flex-col gap-2.5 w-full h-screen pl-16 py-3">
         <div className="flex justify-between w-full items-center">
           <Typography variant="title1" weight="medium" className="text-secondary-hint">Организации</Typography>
-          <Button variant="white" size="sm" leftIcon={PlusIcon}>Создать</Button>
+          <Button variant="white" size="sm" leftIcon={<PlusIcon className="w-5 h-5" />}>Создать</Button>
         </div>
         <div className="flex flex-col gap-2.5 ps-4">
           <div className="w-full flex gap-2 justify-between">
-            <div className="w-full px-3 py-1.5 bg-white border border-hint rounded-full">
-              <Typography variant="text" className="text-hint">Введите запрос</Typography>
-            </div>
-            <Button variant="white" size="sm" rightIcon={SearchIcon}>Поиск</Button>
-            <Button variant="plain" size="sm" rightIcon={FilterIcon}>Фильтр</Button>
+            <Input placeholder="Введите запрос"/>
+            <Button variant="white" size="md" className="rounded-full" rightIcon={<SearchIcon className="w-5 h-5" />}>Поиск</Button>
+            <Button variant="plain" size="md" className="rounded-full" rightIcon={<FilterIcon className="w-5 h-5" />}>Фильтр</Button>
           </div>
           <Typography variant="subheadline" weight="light" className="text-hint">Найдено 3 организации</Typography>
           <div className="flex flex-col gap-2">
             <OrganizationCard title="ООО &quot;Бумажные стаканчики&quot;" description="18 объектов, 12 сотрудников" owner="Семенюк В. А."/>
             <OrganizationCard title="ООО &quot;Картонные коробки&quot;" description="6 объектов, 3 сотрудника" owner="Сидоров А. М."/>
-            <Button variant="white" size="md" leftIcon={PlusIcon} className="w-full">Добавить организацию</Button>
+            <Button variant="white" size="md" leftIcon={<PlusIcon />} className="w-full">Добавить организацию</Button>
           </div>
         </div>
       </div>
@@ -59,8 +58,8 @@ export default function Home() {
             </table>
 
             <div className="flex flex-col gap-2 mt-auto">
-              <Button variant="primary" size="md" className="w-full" rightIcon={DefectIcon}>Открыть дефекты</Button>
-              <Button variant="gray" size="md" className="w-full" rightIcon={ObjectsIcon}>Посмотреть объекты</Button>
+              <Button variant="primary" size="md" className="w-full" rightIcon={<DefectIcon />}>Открыть дефекты</Button>
+              <Button variant="gray" size="md" className="w-full" rightIcon={<ObjectsIcon />}>Посмотреть объекты</Button>
             </div>
           </section>
         </div>

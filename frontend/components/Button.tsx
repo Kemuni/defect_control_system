@@ -17,7 +17,7 @@ const buttonVariants = cva(
                   active:outline-primary-light
                   disabled:opacity-35`,
         gray: `bg-light-background text-black
-               hover:brightness-75
+               hover:brightness-[85%]
                active:outline-hint
                disabled:opacity-50`,
         plain: `bg-transparent text-black
@@ -30,8 +30,8 @@ const buttonVariants = cva(
                 disabled:opacity-50`,
       },
       size: {
-        sm: 'px-3.5 py-2 text-base font-medium w-fit h-9 rounded-full',
-        md: 'px-6 py-1.5 text-base font-medium w-fit h-9 rounded-lg',
+        sm: 'px-2.5 py-1.5 text-base font-medium w-fit h-8 rounded-full',
+        md: 'px-4.5 py-2 text-base font-medium w-fit h-9 rounded-lg',
         lg: 'px-4 py-3 text-lg font-semibold w-40 h-12 rounded-lg',
       },
     },
@@ -44,37 +44,35 @@ const buttonVariants = cva(
 
 export interface ButtonProps extends VariantProps<typeof buttonVariants>, React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
-  leftIcon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  rightIcon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 export interface LinkButtonProps extends VariantProps<typeof buttonVariants>, React.AnchorHTMLAttributes<HTMLAnchorElement> {
   className?: string;
-  leftIcon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  rightIcon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, leftIcon: LeftIcon, rightIcon: RightIcon, ...props}, ref) => {
-    const iconSize = size === "sm" ? "20" : "24";
+  ({ className, variant, size, leftIcon, rightIcon, ...props}, ref) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref as never}
         {...props}
       >
-        {LeftIcon && <LeftIcon width={iconSize} height={iconSize} />}
+        {leftIcon && <div>{leftIcon}</div>}
         {props.children}
-        {RightIcon && <RightIcon width={iconSize} height={iconSize} />}
+        {rightIcon && <div>{rightIcon}</div>}
       </button>
     );
   });
 Button.displayName = "Button";
 
 const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(
-  ({ className, href, variant, size, leftIcon: LeftIcon, rightIcon: RightIcon, ...props}, ref) => {
-    const iconSize = size === "sm" ? "20" : "24";
+  ({ className, href, variant, size, leftIcon, rightIcon, ...props}, ref) => {
     return (
       <a
         className={cn(buttonVariants({ variant, size, className }))}
@@ -82,9 +80,9 @@ const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(
         href={href}
         {...props}
       >
-        {LeftIcon && <LeftIcon width={iconSize} height={iconSize} />}
+        {leftIcon && <div>{leftIcon}</div>}
         {props.children}
-        {RightIcon && <RightIcon width={iconSize} height={iconSize} />}
+        {rightIcon && <div>{rightIcon}</div>}
       </a>
     );
   });
