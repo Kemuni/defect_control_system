@@ -1,4 +1,4 @@
-import {Typography} from "@/components/icons/Typography";
+import {Typography} from "@/components/Typography";
 
 function Footer() {
   return (

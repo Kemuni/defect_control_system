@@ -18,8 +18,8 @@ import ChevronIcon from "@/components/icons/ChevronIcon";
 interface SelectContextType {
   value: string;
   onValueChange: (value: string) => void;
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
 }
 
 const SelectContext = createContext<SelectContextType | undefined>(undefined);
@@ -43,7 +43,7 @@ interface SelectProps {
 export const Select=  React.forwardRef<HTMLDivElement, SelectProps>(
   ({ value, defaultValue = '', onValueChange, children, className }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
   useImperativeHandle(ref, () => selectRef.current as HTMLDivElement);
 
@@ -52,13 +52,13 @@ export const Select=  React.forwardRef<HTMLDivElement, SelectProps>(
   const handleValueChange = useCallback((newValue: string) => {
     setInternalValue(newValue);
     onValueChange?.(newValue);
-    setOpen(false);
+    setIsOpen(false);
   }, [onValueChange]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
-        setOpen(false);
+        setIsOpen(false);
       }
     };
 
@@ -79,8 +79,8 @@ export const Select=  React.forwardRef<HTMLDivElement, SelectProps>(
       value={{
         value: currentValue,
         onValueChange: handleValueChange,
-        open,
-        setOpen,
+        isOpen,
+        setIsOpen,
       }}
     >
       <div ref={selectRef} className={cn(
@@ -115,12 +115,12 @@ interface SelectTriggerProps {
  * отображение выбранного значения.
  */
 const SelectTrigger: React.FC<SelectTriggerProps> = ({ children, className }) => {
-  const { open, setOpen } = useSelect();
+  const { isOpen, setIsOpen } = useSelect();
 
   return (
     <button
       type="button"
-      onClick={() => setOpen(!open)}
+      onClick={() => setIsOpen(!isOpen)}
       className={cn(
         'flex gap-1 w-full items-center justify-between px-3 py-1.5 cursor-pointer',
         className
@@ -130,7 +130,7 @@ const SelectTrigger: React.FC<SelectTriggerProps> = ({ children, className }) =>
       <ChevronIcon
         className={cn(
           "w-4 h-4 transition-transform text-hint rotate-180",
-          open && "rotate-0"
+          isOpen && "rotate-0"
         )}
       />
     </button>
@@ -143,10 +143,13 @@ interface SelectContentProps {
   className?: string;
 }
 
+/*
+ * Составляющая компонента Select. Отвечает за отображение списка значений в выпадающем списке и иного контента в нём.
+ */
 const SelectContent: React.FC<SelectContentProps> = ({ children, className }) => {
-  const { open } = useSelect();
+  const { isOpen } = useSelect();
 
-  if (!open) return null;
+  if (!isOpen) return null;
 
   return (
     <div

@@ -1,10 +1,12 @@
 import OrganizationIcon from "@/components/icons/OrganizationIcon";
 import LogoIcon from "@/components/icons/LogoIcon";
-import {Typography} from "@/components/icons/Typography";
-import ChevronIcon from "@/components/icons/ChevronIcon";
+import {Typography} from "@/components/Typography";
 import PlusIcon from "@/components/icons/PlusIcon";
 import {Select, SelectItem} from "@/components/Select";
 import {Button} from "@/components/Button";
+import UserProfileBtn from "@/components/UserProfileBtn";
+import Link from "next/link";
+
 
 function Header() {
   return (
@@ -19,14 +21,12 @@ function Header() {
         </Select>
         <Button variant="gray" size="sm" className="w-fit h-fit" rightIcon={<PlusIcon className="w-5 h-5 text-hint"/>} />
       </div>
-      <div className="flex w-fit gap-1.5 h-full items-center">
+      <Link href="/" className="flex w-fit gap-1.5 h-full items-center">
         <LogoIcon className="w-12 h-12 text-black" />
         <Typography variant="title1" className="font-[Roboto_mono]">Система Контроля</Typography>
-      </div>
-      <div className="flex w-1/3 gap-1.5 h-full items-center justify-end">
-        <div className="w-7.5 h-7.5 bg-hint rounded-full"/>
-        <Typography variant="title4">Сидоров А. М.</Typography>
-        <ChevronIcon className="rotate-180 w-5 h-5"/>
+      </Link>
+      <div className="flex w-1/3 h-full justify-end">
+        <UserProfileBtn name="Александр" surname="Сидоров" patronymic="Михайлович" />
       </div>
     </header>
   )

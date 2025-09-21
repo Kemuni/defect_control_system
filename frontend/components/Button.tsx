@@ -14,7 +14,7 @@ const buttonVariants = cva(
       variant: {
         primary: `bg-dark-background text-white
                   hover:brightness-[165%]
-                  active:outline-primary-light
+                  active:outline-black
                   disabled:opacity-35`,
         gray: `bg-light-background text-black
                hover:brightness-[85%]

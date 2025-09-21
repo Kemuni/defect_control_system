@@ -19,18 +19,16 @@ export const metadata: Metadata = {
   description: "Веб-приложение для системы контроля дефектов",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="ru">
       <body
         className={`${jost.variable} ${robotoMono.variable} antialiased bg-background`}
       >
         <Header />
-        <div className="pt-[75px]">{children}</div>
+        <div className="pt-[75px]">
+          {children}
+        </div>
         <Footer />
       </body>
     </html>
