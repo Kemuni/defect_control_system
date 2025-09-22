@@ -14,6 +14,6 @@ export default function RootLayout({
   rightSide?: React.ReactNode;
 }>) {
   return (
-    <div className="hidden md:flex gap-4.5">{leftSide}{rightSide}</div>
+    <div className="flex gap-4.5">{leftSide}{rightSide}</div>
   );
 }

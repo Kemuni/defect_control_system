@@ -10,7 +10,7 @@ import Link from "next/link";
 
 function Header() {
   return (
-    <header className="fixed h-[75px] w-full flex justify-between bg-white border-b border-hint px-16 py-4">
+    <header className="fixed z-50 h-[75px] w-full flex justify-between bg-white border-b border-hint px-16 py-4">
       <div className="flex w-1/3 gap-1.5 h-full items-center">
         <OrganizationIcon className="w-6 h-6 text-black" />
         <Typography variant="title4">Организация:</Typography>

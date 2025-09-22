@@ -1,3 +1,4 @@
+"use client";
 import React, {FC} from "react";
 import {Typography} from "@/components/Typography";
 import {Button} from "@/components/Button";
@@ -7,12 +8,16 @@ import SearchIcon from "@/components/icons/SearchIcon";
 import FilterIcon from "@/components/icons/FilterIcon";
 import {cn} from "@/lib/utils";
 import Link from "next/link";
+import {useSearchParams} from "next/navigation";
 
 export type OrganizationsPageProps = React.HTMLAttributes<HTMLDivElement>
 
 const OrganizationsPage: React.FC<OrganizationsPageProps> = (
   {className, ...props}
 ) => {
+  const searchParams = useSearchParams();
+  const organizationId = searchParams.get('organizationId');
+
   return (
     <div className={cn("flex flex-col gap-2.5 w-full h-full", className)} {...props}>
       <div className="flex justify-between w-full items-center">
@@ -29,13 +34,24 @@ const OrganizationsPage: React.FC<OrganizationsPageProps> = (
         <div className="flex flex-col gap-2">
           <OrganizationCard
             organizationId="1"
+            isActive={organizationId === '1'}
             title="ООО &quot;Бумажные стаканчики&quot;"
             description="18 объектов, 12 сотрудников" owner="Семенюк В. А."/>
           <OrganizationCard
             organizationId="2"
+            isActive={organizationId === '2'}
             title="ООО &quot;Картонные коробки&quot;"
             description="6 объектов, 3 сотрудника" owner="Сидоров А. М."/>
-          <Button variant="white" size="md" leftIcon={<PlusIcon />} className="w-full">Добавить организацию</Button>
+          <Link href={{pathname: '/organizations/create'}}>
+          <Button
+              variant="white"
+              size="md"
+              leftIcon={<PlusIcon />}
+              className="w-full"
+            >
+              Добавить организацию
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
@@ -48,21 +64,28 @@ export default OrganizationsPage;
 interface OrganizationCardProps {
   organizationId: string;
   title: string;
+  isActive?: boolean;
   description: string;
   owner: string;
 }
 
-const OrganizationCard: FC<OrganizationCardProps> = ({ organizationId, title, description, owner}) => {
+const OrganizationCard: FC<OrganizationCardProps> = (
+  { organizationId, title, description, owner, isActive = false}) =>
+{
   return (
     <Link
       href={{
         pathname: '/organizations',
         query: {organizationId}
       }}
-      className="flex gap-2 w-full bg-white rounded-md overflow-hidden duration-200
-      hover:brightness-95 hover:scale-[100.5%]">
+      className={cn(
+        "flex gap-2 w-full bg-white rounded-md overflow-hidden duration-200 " +
+        "hover:brightness-95 hover:scale-[100.5%]",
+        isActive && "border border-hint/75 shadow-sm"
+      )}
+    >
       <div className="bg-hint w-[100px] h-[100px]"/>
-      <section className="flex flex-col gap-1 h-full justify-center py-2">
+      <section className="flex flex-col gap-1 justify-center py-2">
         <Typography variant="title4" weight="medium">{title}</Typography>
         <article className="flex flex-col gap-0">
           <Typography variant="subheadline" weight="light" className="text-hint">{description}</Typography>

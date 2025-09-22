@@ -8,6 +8,7 @@ import SearchIcon from "@/components/icons/SearchIcon";
 import RepairIcon from "@/components/icons/RepairIcon";
 import {cn} from "@/lib/utils";
 import {useSearchParams} from "next/navigation";
+import OrganizationIcon from "@/components/icons/OrganizationIcon";
 
 export type OrganizationDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -17,16 +18,23 @@ const OrganizationDetailsPage: React.FC<OrganizationDetailsPageProps> = ({
   const searchParams = useSearchParams();
   const organizationId = searchParams.get('organizationId');
 
-  if (organizationId === '1') {
-    return (<h1>ASD</h1>);
+  if (organizationId === null) {
+    return (
+      <div className={cn("flex flex-col flex-1 items-center justify-center", className)} {...props}>
+        <OrganizationIcon className="w-12 h-12 text-hint"/>
+        <Typography variant="title2" weight="medium" className="text-hint">Выберите организацию</Typography>
+      </div>
+    );
   }
 
   return (
-    <div className={cn("w-full h-full bg-white", className)} {...props}>
+    <div className={cn("w-full h-full", className)} {...props}>
       <div className="flex gap-4 w-full">
         <div className="w-1/2 h-[400px] bg-light-background"></div>
-        <section className="flex flex-col py-3 gap-2 justify-start">
-          <Typography variant="title1" weight="medium" className="text-secondary-hint">ООО &quot;Картонные коробки&quot;</Typography>
+        <section className="w-1/2 flex flex-col py-3 gap-2 justify-start">
+          <Typography variant="title1" weight="medium" className="text-secondary-hint text-ellipsis overflow-hidden">
+            ООО &quot;Картонные коробки&quot;
+          </Typography>
           <table>
             <tbody>
             <tr>
