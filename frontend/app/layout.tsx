@@ -3,6 +3,7 @@ import { Roboto_Mono, Jost } from "next/font/google";
 import "../public/styles/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Tooltip } from '@/components/ReactTooltip'
 
 const jost = Jost({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
         </div>
         <Footer />
+        <Tooltip id={process.env.NEXT_PUBLIC_TOOLTIP_ID} />
       </body>
     </html>
   );
