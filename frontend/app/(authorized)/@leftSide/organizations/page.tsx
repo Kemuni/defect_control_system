@@ -1,5 +1,7 @@
 import OrganizationsPage from "@/components/pages/OrganizationsPage";
 
 export default function Page() {
-  return (<OrganizationsPage className="py-3"/>);
+  return (
+    <OrganizationsPage className="py-3"/>
+  );
 }
