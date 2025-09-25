@@ -80,7 +80,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
   return (
     <div className="flex gap-4">
       { imageLink && (
-          <div className={"relative w-40 h-auto max-h-40"}>
+          <div className={"relative w-40 h-auto max-h-40 overflow-hidden shadow-sm rounded-md"}>
             <CrossIcon
               className={cn(
               "absolute z-50 top-2 right-2 w-6 h-6 cursor-pointer text-white/50 bg-black/25 rounded-md ",
@@ -89,7 +89,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
               onClick={handleImageRemove}
             />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imageLink} alt="Uploaded image" className="w-full h-auto object-cover rounded-md"/>
+            <img src={imageLink} alt="Uploaded image" className="w-full h-auto max-h-40 object-cover rounded-md"/>
           </div>
         )
       }
