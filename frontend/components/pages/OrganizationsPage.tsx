@@ -21,8 +21,25 @@ const OrganizationsPage: React.FC<OrganizationsPageProps> = (
   return (
     <div className={cn("flex flex-col gap-2.5 w-full h-full", className)} {...props}>
       <div className="flex justify-between w-full items-center">
-        <Typography variant="title1" weight="medium" className="text-secondary-hint">Организации</Typography>
-        <Button variant="white" size="sm" leftIcon={<PlusIcon className="w-5 h-5" />}>Создать</Button>
+        <div className="flex gap-1 items-center">
+          <Typography variant="title1" weight="medium" className="text-secondary-hint">
+            Все организации
+          </Typography>
+          <Typography variant="title3" weight="medium" className="text-hint">
+            /
+          </Typography>
+          <Link href={"/defects"}>
+            <Typography variant="title3"
+                        weight="medium"
+                        className="underline text-hint hover:text-secondary-hint transition-colors"
+            >
+              Дефекты
+            </Typography>
+          </Link>
+        </div>
+        <Link href={"/organizations/create"}>
+          <Button variant="white" size="sm" leftIcon={<PlusIcon className="w-5 h-5" />}>Создать организацию</Button>
+        </Link>
       </div>
       <div className="flex flex-col gap-2.5 ps-4">
         <div className="w-full flex gap-2 justify-between">

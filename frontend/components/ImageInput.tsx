@@ -2,17 +2,19 @@ import React, {DragEventHandler, useCallback, useState} from "react";
 import {cn} from "@/lib/utils";
 import {Typography} from "@/components/Typography";
 import CrossIcon from "@/components/icons/CrossIcon";
+import ImageIcon from "@/components/icons/ImageIcon";
 
 
 interface ImageInputProps {
   onImageUpload: (file: File) => void;
+  onImageRemove?: () => void;
   inputAccept?: string;
   inputId?: string;
 }
 
 
 const ImageInput: React.FC<ImageInputProps> = ({
-  onImageUpload, inputAccept = 'image/*', inputId = 'image-input',
+  onImageUpload, onImageRemove, inputAccept = 'image/*', inputId = 'image-input',
 }) => {
   const [imageLink, setImageLink] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -69,6 +71,11 @@ const ImageInput: React.FC<ImageInputProps> = ({
     [onImageUpload]
   );
 
+  const handleImageRemove = useCallback(() => {
+    if (onImageRemove) onImageRemove();
+    setImageLink('');
+  }, [onImageRemove]);
+
 
   return (
     <div className="flex gap-4">
@@ -79,7 +86,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
               "absolute z-50 top-2 right-2 w-6 h-6 cursor-pointer text-white/50 bg-black/25 rounded-md ",
                 "hover:text-white hover:bg-black/50 transition-colors",
               )}
-              onClick={() => setImageLink('')}
+              onClick={handleImageRemove}
             />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={imageLink} alt="Uploaded image" className="w-full h-auto object-cover rounded-md"/>
@@ -94,7 +101,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
           "hover:text-secondary-hint hover:border-secondary-hint",
           imageLink && "hidden",
         )}
-        onDragOver={handleDragOver} onDragEnd={handleDragLeave} onDrop={handleDrop}
+        onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDragEnd={handleDragLeave} onDrop={handleDrop}
       >
         <input type="file"
                accept={inputAccept}
@@ -102,6 +109,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
                className="hidden"
                onChange={handleInputChange} />
         <label htmlFor="image-input" className="cursor-pointer">
+          <ImageIcon className="w-12 h-12 m-auto"/>
           <Typography variant="subheadline" className="text-inherit">
             {
               isDraggingOver ? (

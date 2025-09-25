@@ -4,6 +4,7 @@ import "../public/styles/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Tooltip } from '@/components/ReactTooltip'
+import {Toaster} from "sonner";
 
 const jost = Jost({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </div>
         <Footer />
         <Tooltip id={process.env.NEXT_PUBLIC_TOOLTIP_ID} />
+        <Toaster position="bottom-left" richColors />
       </body>
     </html>
   );

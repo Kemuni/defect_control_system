@@ -11,6 +11,9 @@ import InfoIcon from "@/components/icons/InfoIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
 import KeyIcon from "@/components/icons/KeyIcon";
 import ImageInput from "@/components/ImageInput";
+import {toast} from "sonner";
+import ArrowIcon from "@/components/icons/ArrowIcon";
+import Link from "next/link";
 
 export type CreateOrganizationPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -19,9 +22,19 @@ const CreateOrganizationPage: React.FC<CreateOrganizationPageProps> = ({
 }) => {
   return (
     <div className={cn("w-full h-full flex flex-col gap-6", className)} {...props}>
-      <Typography variant="title1" weight="medium">
-        Создание организации
-      </Typography>
+      <div className="relative flex justify-between w-full items-center">
+        <Typography variant="title1" weight="medium">
+          Создание организации
+        </Typography>
+
+        <Link href={"/organizations"}>
+          <Button variant="plain"
+                  size="sm"
+                  leftIcon={<ArrowIcon className="w-5 h-5 rotate-180"/>}
+                  className="text-hint"
+          >Назад</Button>
+        </Link>
+      </div>
 
       <FormField label="Название организации" required>
         <Input placeholder="Название организации"/>
@@ -31,7 +44,10 @@ const CreateOrganizationPage: React.FC<CreateOrganizationPageProps> = ({
         label="Фото" required
         description="Минимальный размер фото 100х100, максимальный размер 10Мб, рекомендуется разрешение 1:1"
       >
-        <ImageInput onImageUpload={() => {console.log("Image uploaded")}}/>
+        <ImageInput
+          onImageUpload={() => {toast.success("Фото загружено!")}}
+          onImageRemove={() => {toast.warning("Фото удалено!")}}
+        />
       </FormField>
 
       <FormField label="Сотрудники">
@@ -45,14 +61,21 @@ const CreateOrganizationPage: React.FC<CreateOrganizationPageProps> = ({
         </div>
         <Typography variant="subheadline" className="text-hint">Добавлено 2 сотрудника</Typography>
         <hr className="border-hint/25"/>
-        <div className="flex flex-col gap-2.5 ps-3 mt-1">
+        <div className="flex flex-col gap-2.5 ps-3 mt-1 max-h-56 overflow-y-auto">
           <EmployeeCard name="Иван" surname="Иванов" patronymic="Иванович"
                         permissions={["Создание и редактирование объектов", "Исправление любого дефекта",
                         "Регистрация дефектов", "Проверка исправлений дефектов"]}/>
           <hr className="border-hint/25"/>
           <EmployeeCard name="Петр" surname="Петров" patronymic="Петрович"
                         permissions={["Регистрация дефектов", "Проверка исправлений дефектов"]}/>
+          <hr className="border-hint/25"/>
+          <EmployeeCard name="Петр" surname="Петров" patronymic="Петрович"
+                        permissions={["Регистрация дефектов", "Проверка исправлений дефектов"]}/>
+          <hr className="border-hint/25"/>
+          <EmployeeCard name="Петр" surname="Петров" patronymic="Петрович"
+                        permissions={["Регистрация дефектов", "Проверка исправлений дефектов"]}/>
         </div>
+        <Typography variant="subheadline" className="text-hint">Всего сотрудников: 3</Typography>
       </FormField>
 
       <div className="flex gap-2.5">
@@ -126,7 +149,7 @@ const EmployeeCard: FC<EmployeeCardProps> = ({name, surname, patronymic, permiss
             className={chipClassName}
           >
             {permission}
-            <CrossIcon className="w-5 h-5" onClick={() => console.log(`Попытка удалить "${permission}"`)}/>
+            <CrossIcon className="w-5 h-5" onClick={() => toast(`Попытка удалить "${permission}"`)}/>
           </Typography>
         ))}
         {
