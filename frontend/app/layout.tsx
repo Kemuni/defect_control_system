@@ -33,7 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </div>
         <Footer />
         <Tooltip id={process.env.NEXT_PUBLIC_TOOLTIP_ID} />
-        <Toaster position="bottom-left" richColors />
+        <Toaster position="bottom-left" richColors closeButton />
       </body>
     </html>
   );

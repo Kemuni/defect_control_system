@@ -59,9 +59,9 @@ const CreateOrganizationPage: React.FC<CreateOrganizationPageProps> = ({
             Добавить
           </Button>
         </div>
-        <Typography variant="subheadline" className="text-hint">Добавлено 2 сотрудника</Typography>
+        <Typography variant="subheadline" className="text-hint">Найдено 2 сотрудника</Typography>
         <hr className="border-hint/25"/>
-        <div className="flex flex-col gap-2.5 ps-3 mt-1 max-h-56 overflow-y-auto">
+        <div className="flex flex-col gap-2.5 ps-3 mt-1 max-h-56 overflow-y-auto border-b border-hint/25">
           <EmployeeCard name="Иван" surname="Иванов" patronymic="Иванович"
                         permissions={["Создание и редактирование объектов", "Исправление любого дефекта",
                         "Регистрация дефектов", "Проверка исправлений дефектов"]}/>
@@ -75,7 +75,7 @@ const CreateOrganizationPage: React.FC<CreateOrganizationPageProps> = ({
           <EmployeeCard name="Петр" surname="Петров" patronymic="Петрович"
                         permissions={["Регистрация дефектов", "Проверка исправлений дефектов"]}/>
         </div>
-        <Typography variant="subheadline" className="text-hint">Всего сотрудников: 3</Typography>
+        <Typography variant="subheadline" className="text-hint text-end">Всего сотрудников: 3</Typography>
       </FormField>
 
       <div className="flex gap-2.5">
