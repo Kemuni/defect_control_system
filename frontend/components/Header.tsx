@@ -23,7 +23,7 @@ function Header() {
       </div>
       <Link href="/" className="flex w-fit gap-1.5 h-full items-center">
         <LogoIcon className="w-12 h-12 text-black" />
-        <Typography variant="title1" className="font-[Roboto_mono]">Система Контроля</Typography>
+        <Typography variant="title1" className="font-[Roboto_mono] whitespace-nowrap">Система Контроля</Typography>
       </Link>
       <div className="flex w-1/3 h-full justify-end">
         <UserProfileBtn name="Александр" surname="Сидоров" patronymic="Михайлович" />

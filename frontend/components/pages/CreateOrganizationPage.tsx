@@ -10,6 +10,7 @@ import CrossIcon from "@/components/icons/CrossIcon";
 import InfoIcon from "@/components/icons/InfoIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
 import KeyIcon from "@/components/icons/KeyIcon";
+import ImageInput from "@/components/ImageInput";
 
 export type CreateOrganizationPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -30,7 +31,7 @@ const CreateOrganizationPage: React.FC<CreateOrganizationPageProps> = ({
         label="Фото" required
         description="Минимальный размер фото 100х100, максимальный размер 10Мб, рекомендуется разрешение 1:1"
       >
-        <Input placeholder="Фото"/>
+        <ImageInput onImageUpload={() => {console.log("Image uploaded")}}/>
       </FormField>
 
       <FormField label="Сотрудники">
