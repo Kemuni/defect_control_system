@@ -115,7 +115,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
               isDraggingOver ? (
                 <b>Отпустите</b>
               ) : (
-                <span>Перетащите фото или <b>выберите файл...</b></span>
+                <span>Перетащите фото или <b className="underline">выберите файл...</b></span>
               )
             }
           </Typography>

@@ -21,7 +21,7 @@ const OrganizationsPage: React.FC<OrganizationsPageProps> = (
   return (
     <div className={cn("flex flex-col gap-2.5 w-full h-full", className)} {...props}>
       <div className="flex justify-between w-full items-center">
-        <div className="flex gap-1 items-center">
+        <div className="flex gap-1 items-baseline">
           <Typography variant="title1" weight="medium" className="text-secondary-hint">
             Все организации
           </Typography>
