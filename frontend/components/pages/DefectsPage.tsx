@@ -92,7 +92,7 @@ const DefectCard: FC<DefectCardProps> = (
   switch (status) {
     case 'opened':
       statusBgColor = 'bg-blue-accent';
-      statusText = 'Открыт';
+      statusText = 'Свободный';
       statusHintText = 'Дефект открыт и ответственный сотрудник еще не назначен';
       break;
     case 'in_progress':
