@@ -111,12 +111,7 @@ const DefectCard: FC<DefectCardProps> = (
       statusHintText = 'Дефект был исправлен и закрыт';
       break;
   }
-  const CriticalChip = (
-    <Typography variant="subheadline" weight="light"
-                className="w-fit absolute top-1 left-1 rounded-md bg-red-accent text-white px-1 py-0.5">
-      Критично
-    </Typography>
-  )
+
   return (
     <Link
       href={{
@@ -129,7 +124,14 @@ const DefectCard: FC<DefectCardProps> = (
         isActive && "border border-hint/75 shadow-sm"
       )}
     >
-      {isCritical && CriticalChip}
+      {
+        isCritical && (
+          <Typography variant="subheadline" weight="light"
+                      className="w-fit absolute top-1 left-1 rounded-md bg-red-accent text-white px-1 py-0.5">
+            Критично
+          </Typography>
+        )
+      }
       <div className="bg-hint w-[100px] h-full shrink-0"/>
       <div className="min-w-0 flex-1 flex justify-between gap-1 items-center me-2">
         <section className="min-w-0 flex-1 flex flex-col gap-1 py-2">
