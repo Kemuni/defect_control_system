@@ -6,9 +6,10 @@ import DefectIcon from "@/components/icons/DefectIcon";
 import ObjectsIcon from "@/components/icons/ObjectsIcon";
 import SearchIcon from "@/components/icons/SearchIcon";
 import RepairIcon from "@/components/icons/RepairIcon";
-import {cn} from "@/lib/utils";
+import {cn, getRussianWord} from "@/lib/utils";
 import {useSearchParams} from "next/navigation";
 import OrganizationIcon from "@/components/icons/OrganizationIcon";
+import Organization, {mockedOrganizations} from "@/types/Organization";
 
 export type OrganizationDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -17,8 +18,13 @@ const OrganizationDetailsPage: React.FC<OrganizationDetailsPageProps> = ({
 }) => {
   const searchParams = useSearchParams();
   const organizationId = searchParams.get('organizationId');
+  const organization = (
+    organizationId === null
+      ? undefined
+      : mockedOrganizations.find(organization => organization.id === Number(organizationId))
+  );
 
-  if (organizationId === null) {
+  if (organization === undefined) {
     return (
       <div className={cn("flex flex-col flex-1 items-center justify-center", className)} {...props}>
         <OrganizationIcon className="w-12 h-12 text-hint"/>
@@ -30,35 +36,20 @@ const OrganizationDetailsPage: React.FC<OrganizationDetailsPageProps> = ({
   return (
     <div className={cn("w-full h-full", className)} {...props}>
       <div className="flex gap-4 w-full">
-        <div className="w-1/2 h-[400px] bg-light-background"></div>
+        <div className="w-1/2 h-[350px] bg-light-background"></div>
         <section className="w-1/2 flex flex-col py-3 gap-2 justify-start">
           <Typography variant="title1" weight="medium" className="text-secondary-hint text-ellipsis overflow-hidden">
-            ООО &quot;Картонные коробки&quot;
+            {organization.title}
           </Typography>
-          <table>
-            <tbody>
-            <tr>
-              <th className="text-start py-1"><Typography variant="headline" className="text-hint">Дата создания</Typography></th>
-              <td className="text-start"><Typography variant="headline">10 сентября 2025</Typography></td>
-            </tr>
-            <tr>
-              <th className="text-start py-1"><Typography variant="headline" className="text-hint">Владелец</Typography></th>
-              <td className="text-start"><Typography variant="headline">ВЫ</Typography></td>
-            </tr>
-            <tr>
-              <th className="text-start py-1"><Typography variant="headline" className="text-hint">Объектов</Typography></th>
-              <td className="text-start"><Typography variant="headline">8 единиц</Typography></td>
-            </tr>
-            <tr>
-              <th className="text-start py-1"><Typography variant="headline" className="text-hint">Сотрудников</Typography></th>
-              <td className="text-start"><Typography variant="headline">6 человек</Typography></td>
-            </tr>
-            </tbody>
-          </table>
+          <OrganizationDataTable organization={organization} />
 
           <div className="flex flex-col gap-2 mt-auto">
-            <Button variant="primary" size="md" className="w-full" rightIcon={<DefectIcon />}>Открыть дефекты</Button>
-            <Button variant="gray" size="md" className="w-full" rightIcon={<ObjectsIcon />}>Посмотреть объекты</Button>
+            <Button variant="primary" size="md"
+                    className="w-full"
+                    rightIcon={<DefectIcon className="w-6 h-6" />}>Открыть дефекты</Button>
+            <Button variant="gray" size="md"
+                    className="w-full"
+                    rightIcon={<ObjectsIcon className="w-6 h-6" />}>Посмотреть объекты</Button>
           </div>
         </section>
       </div>
@@ -73,6 +64,60 @@ const OrganizationDetailsPage: React.FC<OrganizationDetailsPageProps> = ({
 };
 
 export default OrganizationDetailsPage;
+
+
+const OrganizationDataTable: FC<{ organization: Organization }> = ({ organization }) => {
+  return (
+    <table>
+      <tbody>
+      <tr>
+        <th className="text-start py-1"><Typography variant="headline" className="text-hint">Дата создания</Typography></th>
+        <td className="text-start">
+          <Typography variant="headline">
+            { new Intl.DateTimeFormat('ru-RU', { dateStyle: "long"}).format(organization.createdAt) }
+          </Typography>
+        </td>
+      </tr>
+      <tr>
+        <th className="text-start py-1"><Typography variant="headline" className="text-hint">Владелец</Typography></th>
+        <td className="text-start"><Typography variant="headline">{ organization.ownerInitials }</Typography></td>
+      </tr>
+      <tr>
+        <th className="text-start py-1"><Typography variant="headline" className="text-hint">Объектов</Typography></th>
+        <td className="text-start">
+          <Typography variant="headline">
+            {
+              organization
+                .amountOfObjects
+                .toString()
+                .concat(
+                  ' ',
+                  getRussianWord(organization.amountOfObjects, ['единица', 'единицы', 'единиц'])
+                )
+            }
+          </Typography>
+        </td>
+      </tr>
+      <tr>
+        <th className="text-start py-1"><Typography variant="headline" className="text-hint">Сотрудников</Typography></th>
+        <td className="text-start">
+          <Typography variant="headline">
+            {
+              organization
+                .amountOfEmployees
+                .toString()
+                .concat(
+                  ' ',
+                  getRussianWord(organization.amountOfEmployees, ['человек', 'человека', 'человек'])
+                )
+            }
+          </Typography>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  );
+}
 
 
 interface StatisticsBlockProps {

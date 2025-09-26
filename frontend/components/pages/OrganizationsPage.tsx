@@ -9,6 +9,7 @@ import FilterIcon from "@/components/icons/FilterIcon";
 import {cn} from "@/lib/utils";
 import Link from "next/link";
 import {useSearchParams} from "next/navigation";
+import {mockedOrganizations} from "@/types/Organization";
 
 export type OrganizationsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -49,23 +50,25 @@ const OrganizationsPage: React.FC<OrganizationsPageProps> = (
         </div>
         <Typography variant="subheadline" weight="light" className="text-hint">Найдено 3 организации</Typography>
         <div className="flex flex-col gap-2">
-          <OrganizationCard
-            organizationId="1"
-            isActive={organizationId === '1'}
-            title="ООО &quot;Бумажные стаканчики&quot;"
-            description="18 объектов, 12 сотрудников" owner="Семенюк В. А."/>
-          <OrganizationCard
-            organizationId="2"
-            isActive={organizationId === '2'}
-            title="ООО &quot;Картонные коробки&quot;"
-            description="6 объектов, 3 сотрудника" owner="Сидоров А. М."/>
+          {
+            mockedOrganizations.map((organization) => (
+              <OrganizationCard
+                key={organization.id}
+                organizationId={organization.id}
+                isSelected={organization.id.toString() === organizationId}
+                title={organization.title}
+                description={`${organization.amountOfObjects} объектов, ${organization.amountOfEmployees} сотрудников`}
+                owner={organization.ownerInitials}
+              />
+            ))
+          }
           <Link href={{pathname: '/organizations/create'}}>
-          <Button
-              variant="white"
-              size="md"
-              leftIcon={<PlusIcon />}
-              className="w-full"
-            >
+            <Button
+                variant="white"
+                size="md"
+                leftIcon={<PlusIcon />}
+                className="w-full"
+              >
               Добавить организацию
             </Button>
           </Link>
@@ -79,15 +82,15 @@ export default OrganizationsPage;
 
 
 interface OrganizationCardProps {
-  organizationId: string;
+  organizationId: number;
   title: string;
-  isActive?: boolean;
+  isSelected?: boolean;
   description: string;
   owner: string;
 }
 
 const OrganizationCard: FC<OrganizationCardProps> = (
-  { organizationId, title, description, owner, isActive = false}) =>
+  { organizationId, title, description, owner, isSelected = false}) =>
 {
   return (
     <Link
@@ -98,7 +101,7 @@ const OrganizationCard: FC<OrganizationCardProps> = (
       className={cn(
         "flex gap-2 w-full bg-white rounded-md overflow-hidden duration-200 " +
         "hover:brightness-95 hover:scale-[100.5%]",
-        isActive && "border border-hint/75 shadow-sm"
+        isSelected && "border border-hint/75 shadow-sm"
       )}
     >
       <div className="bg-hint w-[100px] h-[100px]"/>

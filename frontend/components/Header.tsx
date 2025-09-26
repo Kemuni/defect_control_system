@@ -19,7 +19,11 @@ function Header() {
           <SelectItem value='1' className="text-nowrap"><Typography variant="text">ООО &quot;Картонные коробки&quot;</Typography></SelectItem>
           <SelectItem value='2' className="text-nowrap"><Typography variant="text">ООО &quot;Зелень&quot;</Typography></SelectItem>
         </Select>
-        <Button variant="gray" size="sm" className="w-fit h-fit" rightIcon={<PlusIcon className="w-5 h-5 text-hint"/>} />
+        <Link href={"/organizations/create"}>
+          <Button variant="gray" size="sm"
+                  className="w-fit h-fit"
+                  rightIcon={<PlusIcon className="w-5 h-5 text-hint"/>} />
+        </Link>
       </div>
       <Link href="/" className="flex w-fit gap-1.5 h-full items-center">
         <LogoIcon className="w-12 h-12 text-black" />
