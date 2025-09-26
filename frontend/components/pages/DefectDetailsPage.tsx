@@ -1,9 +1,13 @@
 "use client";
-import React from "react";
-import {cn} from "@/lib/utils";
+import React, {useState} from "react";
+import {cn, timeAgoString} from "@/lib/utils";
 import {Typography} from "@/components/Typography";
 import {useSearchParams} from "next/navigation";
 import DefectIcon from "@/components/icons/DefectIcon";
+import Defect, {mockedDefects} from "@/types/Defect";
+import {Button} from "@/components/Button";
+import RepairIcon from "@/components/icons/RepairIcon";
+import {DefectStatusBadge} from "@/components/DefectStatusBadge";
 
 export type DefectDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -12,8 +16,13 @@ const DefectDetailsPage: React.FC<DefectDetailsPageProps> = ({
   }) => {
   const searchParams = useSearchParams();
   const defectId = searchParams.get('defectId');
+  const defect = (
+    defectId === null
+      ? undefined
+      : mockedDefects.find(organization => organization.id === Number(defectId))
+  );
 
-  if (defectId === null) {
+  if (defect === undefined) {
     return (
       <div className={cn("flex flex-col flex-1 items-center justify-center", className)} {...props}>
         <DefectIcon className="w-12 h-12 text-hint"/>
@@ -21,11 +30,197 @@ const DefectDetailsPage: React.FC<DefectDetailsPageProps> = ({
       </div>
     );
   }
+
   return (
-    <div className={cn("flex flex-col flex-1 items-center justify-center", className)} {...props}>
-      <DefectIcon className="w-12 h-12 text-hint"/>
-      <Typography variant="title2" weight="medium" className="text-hint">Выберите дефект</Typography>
+    <div className={cn("w-full h-full", className)} {...props}>
+      <div className="flex gap-4 w-full">
+        <div className="w-2/5 h-[400px] bg-light-background"></div>
+        <section className="w-1/2 flex flex-col py-3 gap-2 justify-start">
+          {
+            defect.isCritical && (
+              <Typography variant="text" className="w-fit rounded-full bg-red-accent text-white px-2 py-1">
+                Критичный
+              </Typography>
+            )
+          }
+          <Typography variant="title1" weight="medium"
+                      className="items-baseline text-secondary-hint text-ellipsis overflow-hidden">
+            {defect.title}
+          </Typography>
+          <Typography variant="title4" className="text-secondary-hint">
+            {
+              defect.deadline === undefined
+                ? "Дедлайн не указан"
+                : `Необходимо исправить до ${ defect.deadline.toLocaleDateString('ru-RU', { month: 'long', day: 'numeric' }) }`
+            }
+          </Typography>
+          <div className="flex gap-2 items-center">
+            <DefectStatusBadge status={defect.status}
+                               hideCircle={true} hideHint={true}
+                               typographyVariant="title4" className="text-hint"/>
+            <span className="w-1 h-1 rounded-full bg-hint inline-block"/>
+            <Typography variant="title4" className="text-hint">
+              создан { timeAgoString(defect.createdAt) }
+            </Typography>
+          </div>
+          <table>
+            <tbody>
+              <tr>
+                <th className="text-start py-1">
+                  <Typography variant="headline" className="text-hint">Создатель</Typography>
+                </th>
+                <td className="text-start">
+                  <Typography variant="headline">
+                    ID: { defect.ownerId }
+                  </Typography>
+                </td>
+              </tr>
+              <tr>
+                <th className="text-start py-1">
+                  <Typography variant="headline" className="text-hint">Ответственный</Typography>
+                </th>
+                <td className="text-start">
+                  <Typography variant="headline">
+                    {
+                      defect.responsibleEmployeeId
+                        ? `ID: ${ defect.responsibleEmployeeId }`
+                        : "Не назначен"
+                    }
+                  </Typography>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <Button variant="primary" size="md"
+                  className="w-full mt-auto"
+                  rightIcon={<RepairIcon className="w-6 h-6" />}>
+            Устранить дефект
+          </Button>
+        </section>
+      </div>
+      <div className="flex flex-col gap-4.5 ps-6 pt-4">
+        <DefectDescription description={defect.description} />
+        <DefectDataTable defect={defect} />
+
+        <div className="flex gap-2.5">
+          <Button variant="primary" size="md" rightIcon={<RepairIcon className="w-6 h-6" />}>
+            Отметить исправленным
+          </Button>
+          <Button variant="plain" size="md">
+            Изменить дефект
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
 export default DefectDetailsPage;
+
+
+interface DefectDescriptionProps {
+  description: string;
+}
+
+const DefectDescription: React.FC<DefectDescriptionProps> = ({ description }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  return (
+    <div>
+      <Typography variant="title4" className="text-hint">Описание</Typography>
+      <Typography variant="text">
+        {
+          description
+            .slice(0, isOpen ? description.length : 100)
+            .concat(description.length > 100 && !isOpen ? "..." : "")
+        }
+        {
+          description.length > 100 && (
+            <span onClick={() => setIsOpen(!isOpen)}
+                  className="inline underline text-hint text-base ms-1 px-1 cursor-pointer">
+              { isOpen ? "меньше" : "больше" }
+            </span>
+          )
+        }
+      </Typography>
+    </div>
+  );
+};
+
+
+interface DefectDataTableProps {
+  defect: Defect;
+}
+
+const DefectDataTable: React.FC<DefectDataTableProps> = ({ defect }) => {
+  return (
+    <table>
+      <tbody>
+      <tr>
+        <th className="text-start py-1">
+          <Typography variant="headline" className="text-hint">Статус</Typography>
+        </th>
+        <td className="text-start">
+          <DefectStatusBadge status={defect.status} typographyVariant="headline" hideCircle />
+        </td>
+      </tr>
+      <tr>
+        <th className="text-start py-1">
+          <Typography variant="headline" className="text-hint">Дата создания</Typography>
+        </th>
+        <td className="text-start">
+          <Typography variant="headline">
+            {
+              defect.createdAt.toLocaleDateString(
+                'ru-RU',
+                { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+            }
+          </Typography>
+        </td>
+      </tr>
+      <tr>
+        <th className="text-start py-1">
+          <Typography variant="headline" className="text-hint">Дедлайн исправления</Typography>
+        </th>
+        <td className="text-start">
+          <Typography variant="headline">
+            {
+              defect.deadline === undefined
+                ? "Дедлайн не указан"
+                : (
+                  defect.deadline?.toLocaleDateString(
+                    'ru-RU',
+                    { year: 'numeric', month: 'long', day: 'numeric' })
+                )
+            }
+          </Typography>
+        </td>
+      </tr>
+      <tr>
+        <th className="text-start py-1">
+          <Typography variant="headline" className="text-hint">Ответственный</Typography>
+        </th>
+        <td className="text-start">
+          <Typography variant="headline">
+            {
+              defect.responsibleEmployeeId
+                ? `ID: ${ defect.responsibleEmployeeId }`
+                : "Не назначен"
+            }
+          </Typography>
+        </td>
+      </tr>
+      <tr>
+        <th className="text-start py-1">
+          <Typography variant="headline" className="text-hint">Приоритет</Typography>
+        </th>
+        <td className="text-start">
+          <Typography variant="headline">
+            { defect.priority === undefined ? "Не указан" : `${defect.priority}/10 баллов` }
+          </Typography>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  );
+};

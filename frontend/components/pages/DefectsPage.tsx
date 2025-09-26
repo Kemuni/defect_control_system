@@ -9,12 +9,17 @@ import Input from "@/components/Input";
 import SearchIcon from "@/components/icons/SearchIcon";
 import FilterIcon from "@/components/icons/FilterIcon";
 import ArrowIcon from "@/components/icons/ArrowIcon";
+import {DefectStatus, mockedDefects} from "@/types/Defect";
+import {useSearchParams} from "next/navigation";
+import {DefectStatusBadge} from "@/components/DefectStatusBadge";
 
 export type DefectsPageProps = React.HTMLAttributes<HTMLDivElement>
 
 const DefectsPage: React.FC<DefectsPageProps> = ({
     className, ...props
   }) => {
+  const searchParams = useSearchParams();
+  const selectedDefectId = searchParams.get('defectId');
 
   return (
     <div className={cn("flex flex-col gap-2.5 w-full h-full", className)} {...props}>
@@ -47,14 +52,14 @@ const DefectsPage: React.FC<DefectsPageProps> = ({
         </div>
         <Typography variant="subheadline" weight="light" className="text-hint">Найдено 3 дефекта</Typography>
         <div className="flex flex-col gap-2">
-          <DefectCard defectId="1" status={'opened'}
-                      title="Дефект 1" description="Описание дефекта 1" createdAt={new Date()}/>
-          <DefectCard defectId="2" status={'in_progress'} critical
-                      title="Дефект 2 Дефект 2 Дефект 2 Дефект 2 Дефект 2"
-                      description="Описание дефекта 2 Описание дефекта 2 Описание дефекта 2 Описание дефекта 2"
-                      createdAt={new Date()}/>
-          <DefectCard defectId="3" status={'on_moderation'}
-                      title="Дефект 3" description="Описание дефекта 3" createdAt={new Date()}/>
+          {
+            mockedDefects.map(defect => (
+              <DefectCard key={defect.id}
+                          defectId={defect.id.toString()}
+                          {...defect}
+                          isSelected={defect.id.toString() === selectedDefectId} />
+            ))
+          }
           <Link href={{pathname: '/defects/create'}}>
             <Button
               variant="white"
@@ -73,44 +78,19 @@ const DefectsPage: React.FC<DefectsPageProps> = ({
 export default DefectsPage;
 
 
-type DefectStatus = 'opened' | 'in_progress' | 'on_moderation' | 'closed';
-
 interface DefectCardProps {
   defectId: string;
   title: string;
   status: DefectStatus;
-  critical?: boolean;
-  isActive?: boolean;
+  isCritical: boolean;
+  isSelected?: boolean;
   description: string;
   createdAt: Date;
 }
 
 const DefectCard: FC<DefectCardProps> = (
-  { defectId, status, title, description, createdAt, critical: isCritical = false, isActive = false}) =>
+  { defectId, status, title, description, createdAt, isCritical = false, isSelected = false}) =>
 {
-  let statusBgColor: string, statusText: string, statusHintText: string;
-  switch (status) {
-    case 'opened':
-      statusBgColor = 'bg-blue-accent';
-      statusText = 'Свободный';
-      statusHintText = 'Дефект открыт и ответственный сотрудник еще не назначен';
-      break;
-    case 'in_progress':
-      statusBgColor = 'bg-green-accent';
-      statusText = 'В работе';
-      statusHintText = 'Дефект в работе и должен быть исправлен в ближайшее время';
-      break;
-    case 'on_moderation':
-      statusBgColor = 'bg-orange-accent';
-      statusText = 'На проверке';
-      statusHintText = 'Исправление дефекта находится на проверке';
-      break;
-    case 'closed':
-      statusBgColor = 'bg-hint';
-      statusText = 'Закрыт';
-      statusHintText = 'Дефект был исправлен и закрыт';
-      break;
-  }
 
   return (
     <Link
@@ -121,7 +101,7 @@ const DefectCard: FC<DefectCardProps> = (
       className={cn(
         "relative flex justify-between gap-2 w-full h-[100px] bg-white rounded-md overflow-hidden duration-200 " +
         "hover:brightness-95 hover:scale-[100.5%]",
-        isActive && "border border-hint/75 shadow-sm"
+        isSelected && "border border-hint/75 shadow-sm"
       )}
     >
       {
@@ -151,14 +131,7 @@ const DefectCard: FC<DefectCardProps> = (
           </article>
         </section>
         <div className="ps-2 flex-0 flex gap-1 items-center justify-end">
-          <div className="flex gap-1 items-center"
-               data-tooltip-id={process.env.NEXT_PUBLIC_TOOLTIP_ID}
-               data-tooltip-content={statusHintText}
-               data-tooltip-delay-show={350}
-          >
-            <div className={cn("w-2 h-2 rounded-full", statusBgColor)}/>
-            <Typography variant="text" className="text-black text-nowrap">{ statusText }</Typography>
-          </div>
+          <DefectStatusBadge status={status}/>
           <Button variant="plain" size="sm" rightIcon={<ArrowIcon className="w-5 h-5" />}>
             Открыть
           </Button>
