@@ -54,7 +54,7 @@ export const DefectStatusBadge: React.FC<DefectStatusBadgeProps> = (
                     className="text-inherit text-nowrap">
           { statusText }
         </Typography>
-        { !hideHint && <InfoIcon className="w-5 h-5 text-inherit" {...hintProps}/> }
+        { !hideHint && <InfoIcon className="w-5 h-5 text-hint" {...hintProps}/> }
       </div>
     );
   }

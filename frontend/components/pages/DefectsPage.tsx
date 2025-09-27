@@ -36,7 +36,7 @@ const DefectsPage: React.FC<DefectsPageProps> = ({
                         weight="medium"
                         className="underline text-hint hover:text-secondary-hint transition-colors"
             >
-              организации
+              Организации
             </Typography>
           </Link>
         </div>

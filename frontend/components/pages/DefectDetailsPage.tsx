@@ -8,6 +8,7 @@ import Defect, {mockedDefects} from "@/types/Defect";
 import {Button} from "@/components/Button";
 import RepairIcon from "@/components/icons/RepairIcon";
 import {DefectStatusBadge} from "@/components/DefectStatusBadge";
+import EmployeeCard from "@/components/EmployeeCard";
 
 export type DefectDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -57,40 +58,24 @@ const DefectDetailsPage: React.FC<DefectDetailsPageProps> = ({
           <div className="flex gap-2 items-center">
             <DefectStatusBadge status={defect.status}
                                hideCircle={true} hideHint={true}
-                               typographyVariant="title4" className="text-hint"/>
+                               typographyVariant="headline" className="text-hint"/>
             <span className="w-1 h-1 rounded-full bg-hint inline-block"/>
-            <Typography variant="title4" className="text-hint">
+            <Typography variant="headline" className="text-hint">
               создан { timeAgoString(defect.createdAt) }
             </Typography>
           </div>
-          <table>
-            <tbody>
-              <tr>
-                <th className="text-start py-1">
-                  <Typography variant="headline" className="text-hint">Создатель</Typography>
-                </th>
-                <td className="text-start">
-                  <Typography variant="headline">
-                    ID: { defect.ownerId }
-                  </Typography>
-                </td>
-              </tr>
-              <tr>
-                <th className="text-start py-1">
-                  <Typography variant="headline" className="text-hint">Ответственный</Typography>
-                </th>
-                <td className="text-start">
-                  <Typography variant="headline">
-                    {
-                      defect.responsibleEmployeeId
-                        ? `ID: ${ defect.responsibleEmployeeId }`
-                        : "Не назначен"
-                    }
-                  </Typography>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+
+          <div className="grid grid-cols-2 gap-x-1 gap-y-2.5 items-center mt-2">
+            <Typography variant="headline" className="text-hint">Зарегистрировал</Typography>
+            <EmployeeCard employeeId={defect.creatorEmployee.id} {...defect.creatorEmployee}/>
+
+            <Typography variant="headline" className="text-hint">Ответственный</Typography>
+            {
+              defect.responsibleEmployee
+                ? (<EmployeeCard employeeId={defect.responsibleEmployee.id} {...defect.responsibleEmployee}/>)
+                : (<Typography variant="headline">Не назначен</Typography>)
+            }
+          </div>
 
           <Button variant="primary" size="md"
                   className="w-full mt-auto"
@@ -154,73 +139,39 @@ interface DefectDataTableProps {
 
 const DefectDataTable: React.FC<DefectDataTableProps> = ({ defect }) => {
   return (
-    <table>
-      <tbody>
-      <tr>
-        <th className="text-start py-1">
-          <Typography variant="headline" className="text-hint">Статус</Typography>
-        </th>
-        <td className="text-start">
-          <DefectStatusBadge status={defect.status} typographyVariant="headline" hideCircle />
-        </td>
-      </tr>
-      <tr>
-        <th className="text-start py-1">
-          <Typography variant="headline" className="text-hint">Дата создания</Typography>
-        </th>
-        <td className="text-start">
-          <Typography variant="headline">
-            {
-              defect.createdAt.toLocaleDateString(
-                'ru-RU',
-                { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })
-            }
-          </Typography>
-        </td>
-      </tr>
-      <tr>
-        <th className="text-start py-1">
-          <Typography variant="headline" className="text-hint">Дедлайн исправления</Typography>
-        </th>
-        <td className="text-start">
-          <Typography variant="headline">
-            {
-              defect.deadline === undefined
-                ? "Дедлайн не указан"
-                : (
-                  defect.deadline?.toLocaleDateString(
-                    'ru-RU',
-                    { year: 'numeric', month: 'long', day: 'numeric' })
-                )
-            }
-          </Typography>
-        </td>
-      </tr>
-      <tr>
-        <th className="text-start py-1">
-          <Typography variant="headline" className="text-hint">Ответственный</Typography>
-        </th>
-        <td className="text-start">
-          <Typography variant="headline">
-            {
-              defect.responsibleEmployeeId
-                ? `ID: ${ defect.responsibleEmployeeId }`
-                : "Не назначен"
-            }
-          </Typography>
-        </td>
-      </tr>
-      <tr>
-        <th className="text-start py-1">
-          <Typography variant="headline" className="text-hint">Приоритет</Typography>
-        </th>
-        <td className="text-start">
-          <Typography variant="headline">
-            { defect.priority === undefined ? "Не указан" : `${defect.priority}/10 баллов` }
-          </Typography>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div className="grid grid-cols-2 gap-x-1 gap-y-2.5 items-center">
+      <Typography variant="headline" className="text-hint">Статус</Typography>
+      <DefectStatusBadge status={defect.status} typographyVariant="headline" hideCircle />
+
+      <Typography variant="headline" className="text-hint">Ответственный</Typography>
+      {
+        defect.responsibleEmployee
+          ? (<EmployeeCard employeeId={defect.responsibleEmployee.id} {...defect.responsibleEmployee}/>)
+          : (<Typography variant="headline">Не назначен</Typography>)
+      }
+
+      <Typography variant="headline" className="text-hint">Дата создания</Typography>
+      <Typography variant="headline">
+        {
+          defect.createdAt.toLocaleDateString(
+            'ru-RU',
+            { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+        }
+      </Typography>
+
+      <Typography variant="headline" className="text-hint">Дедлайн исправления</Typography>
+      <Typography variant="headline">
+        {
+          defect.deadline === undefined
+            ? "Дедлайн не указан"
+            : (defect.deadline.toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' }))
+        }
+      </Typography>
+
+      <Typography variant="headline" className="text-hint">Приоритет</Typography>
+      <Typography variant="headline">
+        { defect.priority ? "Не указан" : `${defect.priority}/10 баллов` }
+      </Typography>
+    </div>
   );
 };

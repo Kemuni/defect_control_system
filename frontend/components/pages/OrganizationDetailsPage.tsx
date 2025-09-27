@@ -10,6 +10,7 @@ import {cn, getRussianWord} from "@/lib/utils";
 import {useSearchParams} from "next/navigation";
 import OrganizationIcon from "@/components/icons/OrganizationIcon";
 import Organization, {mockedOrganizations} from "@/types/Organization";
+import EmployeeCard from "@/components/EmployeeCard";
 
 export type OrganizationDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -68,54 +69,41 @@ export default OrganizationDetailsPage;
 
 const OrganizationDataTable: FC<{ organization: Organization }> = ({ organization }) => {
   return (
-    <table>
-      <tbody>
-      <tr>
-        <th className="text-start py-1"><Typography variant="headline" className="text-hint">Дата создания</Typography></th>
-        <td className="text-start">
-          <Typography variant="headline">
-            { new Intl.DateTimeFormat('ru-RU', { dateStyle: "long"}).format(organization.createdAt) }
-          </Typography>
-        </td>
-      </tr>
-      <tr>
-        <th className="text-start py-1"><Typography variant="headline" className="text-hint">Владелец</Typography></th>
-        <td className="text-start"><Typography variant="headline">{ organization.ownerInitials }</Typography></td>
-      </tr>
-      <tr>
-        <th className="text-start py-1"><Typography variant="headline" className="text-hint">Объектов</Typography></th>
-        <td className="text-start">
-          <Typography variant="headline">
-            {
-              organization
-                .amountOfObjects
-                .toString()
-                .concat(
-                  ' ',
-                  getRussianWord(organization.amountOfObjects, ['единица', 'единицы', 'единиц'])
-                )
-            }
-          </Typography>
-        </td>
-      </tr>
-      <tr>
-        <th className="text-start py-1"><Typography variant="headline" className="text-hint">Сотрудников</Typography></th>
-        <td className="text-start">
-          <Typography variant="headline">
-            {
-              organization
-                .amountOfEmployees
-                .toString()
-                .concat(
-                  ' ',
-                  getRussianWord(organization.amountOfEmployees, ['человек', 'человека', 'человек'])
-                )
-            }
-          </Typography>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div className="grid grid-cols-2 gap-x-1 gap-y-2.5 items-center">
+      <Typography variant="headline" className="text-hint">Дата создания</Typography>
+      <Typography variant="headline">
+        { new Intl.DateTimeFormat('ru-RU', { dateStyle: "medium"}).format(organization.createdAt) }
+      </Typography>
+
+      <Typography variant="headline" className="text-hint">Владелец</Typography>
+      <EmployeeCard employeeId={organization.ownerEmployee.id} {...organization.ownerEmployee}/>
+
+      <Typography variant="headline" className="text-hint">Объектов</Typography>
+      <Typography variant="headline">
+        {
+          organization
+            .amountOfObjects
+            .toString()
+            .concat(
+              ' ',
+              getRussianWord(organization.amountOfObjects, ['единица', 'единицы', 'единиц'])
+            )
+        }
+      </Typography>
+
+      <Typography variant="headline" className="text-hint">Сотрудников</Typography>
+      <Typography variant="headline">
+        {
+          organization
+            .amountOfEmployees
+            .toString()
+            .concat(
+              ' ',
+              getRussianWord(organization.amountOfEmployees, ['человек', 'человека', 'человек'])
+            )
+        }
+      </Typography>
+    </div>
   );
 }
 
