@@ -1,3 +1,5 @@
+import {BoundedEmployee} from "@/types/BoundedEmployee";
+
 export default interface Defect {
   id: number;
   title: string;
@@ -7,8 +9,8 @@ export default interface Defect {
   deadline?: Date;
   isCritical: boolean;
   organizationId: number;
-  ownerId: number;  // Создатель задачи
-  responsibleEmployeeId?: number;
+  creatorEmployee: BoundedEmployee;  // Тот кто зарегистрировал дефект
+  responsibleEmployee?: BoundedEmployee;
   priority?: number;
 }
 
@@ -24,7 +26,18 @@ export const mockedDefects: Defect[] = [
     deadline: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // сегодня + 2 дня
     isCritical: true,
     organizationId: 1,
-    ownerId: 1,
+    creatorEmployee: {
+      id: 1,
+      surname: 'Иванов',
+      name: 'Иван',
+      patronymic: 'Иванович',
+    },
+    responsibleEmployee: {
+      id: 2,
+      surname: 'Петров',
+      name: 'Петр',
+      patronymic: 'Петрович',
+    },
     priority: 8,
   },
   {
@@ -35,7 +48,12 @@ export const mockedDefects: Defect[] = [
     createdAt: new Date(),
     isCritical: false,
     organizationId: 1,
-    ownerId: 2,
+    creatorEmployee: {
+      id: 1,
+      surname: 'Иванов',
+      name: 'Иван',
+      patronymic: 'Иванович',
+    },
     priority: 3,
   },
   {
@@ -46,6 +64,12 @@ export const mockedDefects: Defect[] = [
     createdAt: new Date(),
     isCritical: true,
     organizationId: 2,
-    ownerId: 1,
+    creatorEmployee: {
+      id: 2,
+      surname: 'Семенов',
+      name: 'Семен',
+      patronymic: 'Семенович',
+    },
+    priority: 4,
   },
-]
+];

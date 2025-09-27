@@ -1,10 +1,12 @@
+import {BoundedEmployee} from "@/types/BoundedEmployee";
+
 export default interface Organization {
   id: number;
   title: string;
   amountOfEmployees: number;
   amountOfObjects: number;
   amountOfDefects: number;
-  ownerInitials: string;
+  ownerEmployee: BoundedEmployee;
   createdAt: Date;
 }
 
@@ -15,7 +17,12 @@ export const mockedOrganizations: Organization[] = [
     amountOfEmployees: 12,
     amountOfObjects: 9,
     amountOfDefects: 8,
-    ownerInitials: "Семенюк В. А.",
+    ownerEmployee: {
+      id: 1,
+      surname: "Семенюк",
+      name: "Владимир",
+      patronymic: "Александрович"
+    },
     createdAt: new Date(),
   },
   {
@@ -24,7 +31,12 @@ export const mockedOrganizations: Organization[] = [
     amountOfEmployees: 3,
     amountOfObjects: 6,
     amountOfDefects: 4,
-    ownerInitials: 'Сидоров А. М.',
+    ownerEmployee: {
+      id: 2,
+      surname: "Сидоров",
+      name: "Александр",
+      patronymic: "Михайлович"
+    },
     createdAt: new Date(),
   }
 ];
