@@ -1,20 +1,25 @@
 "use client";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Typography} from "@/components/Typography";
 import {cn} from "@/lib/utils";
-import Input from "@/components/Input";
+import Input, {TextArea} from "@/components/Input";
 import FormField from "@/components/FormField";
 import {Button} from "@/components/Button";
 import ImageInput from "@/components/ImageInput";
-import {toast} from "sonner";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import Link from "next/link";
+import {toast} from "sonner";
 
 export type CreateDefectPageProps = React.HTMLAttributes<HTMLDivElement>
 
-const CreateDefectPage: React.FC<CreateDefectPageProps> = ({
-                                                                         className, ...props
-                                                                       }) => {
+const CreateDefectPage: React.FC<CreateDefectPageProps> = (
+  { className, ...props}
+) => {
+  const [images, setImages] = useState<File[]>([]);
+  useEffect(() => {
+    toast(`Фото изменено. Всего ${images.length} шт.`);
+  }, [images]);
+
   return (
     <div className={cn("w-full h-full flex flex-col gap-6", className)} {...props}>
       <div className="relative flex justify-between w-full items-center">
@@ -35,14 +40,15 @@ const CreateDefectPage: React.FC<CreateDefectPageProps> = ({
         <Input placeholder="Назовите дефект"/>
       </FormField>
 
+      <FormField label="Описание дефекта" required>
+        <TextArea placeholder="Опишите дефект и как его исправить" />
+      </FormField>
+
       <FormField
         label="Фото" required
         description="Минимальный размер фото 100х100, максимальный размер каждого фото 10Мб"
       >
-        <ImageInput
-          onImageUpload={() => {toast.success("Фото загружено!")}}
-          onImageRemove={() => {toast.warning("Фото удалено!")}}
-        />
+        <ImageInput multiple maxImages={3} setImages={setImages} />
       </FormField>
 
       <div className="flex gap-2.5">

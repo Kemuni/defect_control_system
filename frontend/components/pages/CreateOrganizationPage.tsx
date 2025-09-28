@@ -44,10 +44,7 @@ const CreateOrganizationPage: React.FC<CreateOrganizationPageProps> = ({
         label="Фото" required
         description="Минимальный размер фото 100х100, максимальный размер 10Мб, рекомендуется разрешение 1:1"
       >
-        <ImageInput
-          onImageUpload={() => {toast.success("Фото загружено!")}}
-          onImageRemove={() => {toast.warning("Фото удалено!")}}
-        />
+        <ImageInput setImage={(file) => {toast(file ? "Фото загружено!" : "Фото удалено!")}} />
       </FormField>
 
       <FormField label="Сотрудники">
