@@ -61,7 +61,7 @@ const CreateOrganizationPage: React.FC<CreateOrganizationPageProps> = ({
         </div>
         <Typography variant="subheadline" className="text-hint">Найдено 2 сотрудника</Typography>
         <hr className="border-hint/25"/>
-        <div className="flex flex-col gap-2.5 ps-3 mt-1 max-h-56 overflow-y-auto border-b border-hint/25">
+        <div className="flex flex-col gap-2.5 ps-3 py-1.5 max-h-56 overflow-y-auto border-b border-hint/25">
           <EmployeeCard name="Иван" surname="Иванов" patronymic="Иванович"
                         permissions={["Создание и редактирование объектов", "Исправление любого дефекта",
                         "Регистрация дефектов", "Проверка исправлений дефектов"]}/>

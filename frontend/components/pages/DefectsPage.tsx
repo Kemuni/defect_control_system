@@ -12,6 +12,7 @@ import ArrowIcon from "@/components/icons/ArrowIcon";
 import {DefectStatus, mockedDefects} from "@/types/Defect";
 import {useSearchParams} from "next/navigation";
 import {DefectStatusBadge} from "@/components/DefectStatusBadge";
+import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
 
 export type DefectsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -81,6 +82,7 @@ export default DefectsPage;
 interface DefectCardProps {
   defectId: string;
   title: string;
+  imageUrl: string;
   status: DefectStatus;
   isCritical: boolean;
   isSelected?: boolean;
@@ -89,7 +91,7 @@ interface DefectCardProps {
 }
 
 const DefectCard: FC<DefectCardProps> = (
-  { defectId, status, title, description, createdAt, isCritical = false, isSelected = false}) =>
+  { defectId, status, title, imageUrl, description, createdAt, isCritical = false, isSelected = false}) =>
 {
 
   return (
@@ -107,12 +109,16 @@ const DefectCard: FC<DefectCardProps> = (
       {
         isCritical && (
           <Typography variant="subheadline" weight="light"
-                      className="w-fit absolute top-1 left-1 rounded-md bg-red-accent text-white px-1 py-0.5">
+                      className="z-10 w-fit absolute top-1 left-1 rounded-md bg-red-accent text-white px-1 py-0.5">
             Критично
           </Typography>
         )
       }
-      <div className="bg-hint w-[100px] h-full shrink-0"/>
+      <div className="relative w-[100px] h-[100px] shrink-0">
+        <ImageWithPlaceholder hidePlaceholderText src={imageUrl} alt="Фото дефекта"
+                              sizes="(max-width: 768px) 25vw, (max-width: 1200px) 15vw, 10vw"
+                              fill className="object-cover" />
+      </div>
       <div className="min-w-0 flex-1 flex justify-between gap-1 items-center me-2">
         <section className="min-w-0 flex-1 flex flex-col gap-1 py-2">
           <Typography variant="title4" weight="medium"

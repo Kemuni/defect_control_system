@@ -1,5 +1,5 @@
 "use client";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {cn, timeAgoString} from "@/lib/utils";
 import {Typography} from "@/components/Typography";
 import {useSearchParams} from "next/navigation";
@@ -9,6 +9,7 @@ import {Button} from "@/components/Button";
 import RepairIcon from "@/components/icons/RepairIcon";
 import {DefectStatusBadge} from "@/components/DefectStatusBadge";
 import EmployeeCard from "@/components/EmployeeCard";
+import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
 
 export type DefectDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -35,7 +36,12 @@ const DefectDetailsPage: React.FC<DefectDetailsPageProps> = ({
   return (
     <div className={cn("w-full h-full", className)} {...props}>
       <div className="flex gap-4 w-full">
-        <div className="w-2/5 h-[400px] bg-light-background"></div>
+        <div
+          className="relative w-1/2 h-[400px]">
+          <ImageWithPlaceholder src={defect.imageUrl} alt="Фото дефекта"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                fill className="object-cover" />
+        </div>
         <section className="w-1/2 flex flex-col py-3 gap-2 justify-start">
           {
             defect.isCritical && (
@@ -109,6 +115,9 @@ interface DefectDescriptionProps {
 
 const DefectDescription: React.FC<DefectDescriptionProps> = ({ description }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  useEffect(() => {
+    setIsOpen(false);
+  }, [description]);
 
   return (
     <div>

@@ -1,19 +1,19 @@
 import {Typography} from "@/components/Typography";
 import {toast} from "sonner";
 import React from "react";
-import {cn} from "@/lib/utils";
+import {cn, getInitials} from "@/lib/utils";
 
 
 interface EmployeeCardProps {
   employeeId: number;
   name: string;
   surname: string;
-  patronymic: string;
+  patronymic?: string;
   className?: string;
 }
 
 const EmployeeCard: React.FC<EmployeeCardProps> = (
-  { employeeId, name, surname, patronymic, className }
+  { employeeId, name, surname, patronymic = '', className }
 ) => {
   return (
     <div
@@ -26,7 +26,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = (
     >
       <div className="w-7.5 h-7.5 bg-hint rounded-full"/>
       <Typography variant="headline" weight="regular" className="text-inherit">
-        { surname } { name.slice(0, 1) }. { patronymic.slice(0, 1) }.
+        { getInitials({surname, name, patronymic}) }
       </Typography>
     </div>
   )

@@ -11,6 +11,7 @@ import {useSearchParams} from "next/navigation";
 import OrganizationIcon from "@/components/icons/OrganizationIcon";
 import Organization, {mockedOrganizations} from "@/types/Organization";
 import EmployeeCard from "@/components/EmployeeCard";
+import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
 
 export type OrganizationDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -37,7 +38,12 @@ const OrganizationDetailsPage: React.FC<OrganizationDetailsPageProps> = ({
   return (
     <div className={cn("w-full h-full", className)} {...props}>
       <div className="flex gap-4 w-full">
-        <div className="w-1/2 h-[350px] bg-light-background"></div>
+        <div
+          className="relative w-1/2 h-[350px]">
+          <ImageWithPlaceholder src={organization.logoUrl} alt="Лого организации"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                fill className="object-cover" />
+        </div>
         <section className="w-1/2 flex flex-col py-3 gap-2 justify-start">
           <Typography variant="title1" weight="medium" className="text-secondary-hint text-ellipsis overflow-hidden">
             {organization.title}

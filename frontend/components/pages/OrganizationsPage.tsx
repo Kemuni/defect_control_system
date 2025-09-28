@@ -6,10 +6,12 @@ import PlusIcon from "@/components/icons/PlusIcon";
 import Input from "@/components/Input";
 import SearchIcon from "@/components/icons/SearchIcon";
 import FilterIcon from "@/components/icons/FilterIcon";
-import {cn} from "@/lib/utils";
+import {cn, getInitials} from "@/lib/utils";
 import Link from "next/link";
 import {useSearchParams} from "next/navigation";
 import {mockedOrganizations} from "@/types/Organization";
+import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
+
 
 export type OrganizationsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -55,10 +57,11 @@ const OrganizationsPage: React.FC<OrganizationsPageProps> = (
               <OrganizationCard
                 key={organization.id}
                 organizationId={organization.id}
+                logoUrl={organization.logoUrl}
                 isSelected={organization.id.toString() === organizationId}
                 title={organization.title}
                 description={`${organization.amountOfObjects} объектов, ${organization.amountOfEmployees} сотрудников`}
-                owner={organization.ownerInitials}
+                ownerInitials={getInitials(organization.ownerEmployee)}
               />
             ))
           }
@@ -84,13 +87,14 @@ export default OrganizationsPage;
 interface OrganizationCardProps {
   organizationId: number;
   title: string;
+  logoUrl: string;
   isSelected?: boolean;
   description: string;
-  owner: string;
+  ownerInitials: string;
 }
 
 const OrganizationCard: FC<OrganizationCardProps> = (
-  { organizationId, title, description, owner, isSelected = false}) =>
+  { organizationId, title, logoUrl, description, ownerInitials, isSelected = false}) =>
 {
   return (
     <Link
@@ -101,15 +105,19 @@ const OrganizationCard: FC<OrganizationCardProps> = (
       className={cn(
         "flex gap-2 w-full bg-white rounded-md overflow-hidden duration-200 " +
         "hover:brightness-95 hover:scale-[100.5%]",
-        isSelected && "border border-hint/75 shadow-sm"
+        isSelected && "ring-2 ring-hint/75 shadow-sm"
       )}
     >
-      <div className="bg-hint w-[100px] h-[100px]"/>
+      <div className="relative w-[100px] h-[100px]">
+        <ImageWithPlaceholder hidePlaceholderText src={logoUrl} alt="Логотип организации"
+                              sizes="(max-width: 768px) 25vw, (max-width: 1200px) 15vw, 10vw"
+                              fill className="object-cover" />
+      </div>
       <section className="flex flex-col gap-1 justify-center py-2">
         <Typography variant="title4" weight="medium">{title}</Typography>
         <article className="flex flex-col gap-0">
           <Typography variant="subheadline" weight="light" className="text-hint">{description}</Typography>
-          <Typography variant="subheadline" weight="light" className="text-hint">Владелец {owner}</Typography>
+          <Typography variant="subheadline" weight="light" className="text-hint">Владелец {ownerInitials}</Typography>
         </article>
       </section>
     </Link>
