@@ -1,5 +1,6 @@
 import {ClassValue, clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
+import {BoundedEmployee} from "@/types/BoundedEmployee";
 
 /**
  * Объединяет классы Tailwind с clsx. cn = "class names".
@@ -64,4 +65,16 @@ export function getRussianWord(number: number, words: [string, string, string]) 
       ? 2
       : cases[Math.min(number % 10, 5)]
     ];
+}
+
+
+/**
+ * Функция для получения инициалов человека.
+ * @param surname - Фамилия.
+ * @param name - Имя.
+ * @param patronymic - Отчество.
+ * @returns Инициалы в формате "Фамилия И. О.".
+ */
+export function getInitials({surname, name, patronymic}: Omit<BoundedEmployee, 'id'>): string {
+  return `${surname} ${name.slice(0, 1)}.${patronymic ? patronymic.slice(0, 1).concat('.') : ''}`
 }
