@@ -39,3 +39,9 @@
   --text-5xl: 2.5rem;
   --text-5xl--line-height: 3rem;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

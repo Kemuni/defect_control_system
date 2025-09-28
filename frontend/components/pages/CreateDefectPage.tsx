@@ -9,6 +9,7 @@ import ImageInput from "@/components/ImageInput";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import Link from "next/link";
 import {toast} from "sonner";
+import {Select, SelectItem} from "@/components/Select";
 
 export type CreateDefectPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -36,12 +37,21 @@ const CreateDefectPage: React.FC<CreateDefectPageProps> = (
         </Link>
       </div>
 
-      <FormField label="Наименование дефекта" required>
-        <Input placeholder="Назовите дефект"/>
-      </FormField>
+      <div className="flex gap-4">
+        <FormField label="Наименование дефекта" className="w-full" required>
+          <Input placeholder="Назовите дефект" />
+        </FormField>
+        <FormField label="Объект" className="w-64" required>
+          <Select placeholder="Выберите объект" className="rounded-full bg-white">
+            <SelectItem value={'1'}>Шоссе Е52</SelectItem>
+            <SelectItem value={'2'}>Компьютер</SelectItem>
+            <SelectItem value={'3'}>Ноутбук</SelectItem>
+          </Select>
+        </FormField>
+      </div>
 
       <FormField label="Описание дефекта" required>
-        <TextArea placeholder="Опишите дефект и как его исправить" />
+        <TextArea placeholder="Опишите дефект и способ её решения" />
       </FormField>
 
       <FormField
@@ -49,6 +59,22 @@ const CreateDefectPage: React.FC<CreateDefectPageProps> = (
         description="Минимальный размер фото 100х100, максимальный размер каждого фото 10Мб"
       >
         <ImageInput multiple maxImages={3} setImages={setImages} />
+      </FormField>
+
+      <div className="flex gap-4">
+        <FormField label="Приоритет" className="w-32" required>
+          <Input placeholder="N"
+                 type="number"
+                 min={1} max={10}
+                 suffix={<Typography variant="subheadline" className="text-inherit">из 10</Typography>} />
+        </FormField>
+        <FormField label="Дейдлайн исправления">
+          <Input placeholder="14.02.2025" />
+        </FormField>
+      </div>
+
+      <FormField label="Ответственное лицо">
+        <Input placeholder="Введите ФИО" />
       </FormField>
 
       <div className="flex gap-2.5">

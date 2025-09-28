@@ -34,6 +34,7 @@ function useSelect(): SelectContextType {
 
 interface SelectProps {
   value?: string;
+  placeholder?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   children: ReactNode;
@@ -41,7 +42,13 @@ interface SelectProps {
 }
 
 export const Select=  React.forwardRef<HTMLDivElement, SelectProps>(
-  ({ value, defaultValue = '', onValueChange, children, className }, ref) => {
+  ({ value,
+     placeholder = 'Выберите значение',
+     defaultValue = '',
+     onValueChange,
+     children,
+     className
+   }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -85,14 +92,14 @@ export const Select=  React.forwardRef<HTMLDivElement, SelectProps>(
     >
       <div ref={selectRef} className={cn(
         'relative w-full',
-        'rounded-md bg-light-background border border-hint/25 transition-colors',
+        'rounded-md bg-light-background border border-hint/50 transition-colors',
         'hover:border-hint',
         className
       )}>
         <SelectTrigger>
           { selectedItemElement
             ? selectedItemElement.props.children
-            : <span className="text-hint">Выберите значение</span>
+            : <span className="text-hint">{placeholder}</span>
           }
         </SelectTrigger>
         <SelectContent>
@@ -122,7 +129,7 @@ const SelectTrigger: React.FC<SelectTriggerProps> = ({ children, className }) =>
       type="button"
       onClick={() => setIsOpen(!isOpen)}
       className={cn(
-        'flex gap-1 w-full items-center justify-between px-3 py-1.5 cursor-pointer',
+        'flex gap-1 w-full items-center justify-between px-3 py-1 cursor-pointer',
         className
       )}
     >
@@ -154,7 +161,8 @@ const SelectContent: React.FC<SelectContentProps> = ({ children, className }) =>
   return (
     <div
       className={cn(
-        'absolute z-50 w-fit max-w-96 mt-1 rounded-md border border-hint bg-light-background max-h-60 overflow-auto',
+        'absolute z-50 min-w-fit w-full max-w-96 max-h-60 mt-1 rounded-md border',
+        'border-hint bg-inherit overflow-auto',
         className
       )}
     >
