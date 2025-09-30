@@ -12,6 +12,7 @@ import OrganizationIcon from "@/components/icons/OrganizationIcon";
 import Organization, {mockedOrganizations} from "@/types/Organization";
 import EmployeeCard from "@/components/EmployeeCard";
 import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
+import Link from "next/link";
 
 export type OrganizationDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -51,12 +52,16 @@ const OrganizationDetailsPage: React.FC<OrganizationDetailsPageProps> = ({
           <OrganizationDataTable organization={organization} />
 
           <div className="flex flex-col gap-2 mt-auto">
-            <Button variant="primary" size="md"
-                    className="w-full"
-                    rightIcon={<DefectIcon className="w-6 h-6" />}>Открыть дефекты</Button>
-            <Button variant="gray" size="md"
-                    className="w-full"
-                    rightIcon={<ObjectsIcon className="w-6 h-6" />}>Посмотреть объекты</Button>
+            <Link href={`/organizations/${organization.id}/defects`}>
+              <Button variant="primary" size="md"
+                      className="w-full"
+                      rightIcon={<DefectIcon className="w-6 h-6" />}>Открыть дефекты</Button>
+            </Link>
+            <Link href={`/organizations/${organization.id}/objects`}>
+              <Button variant="gray" size="md"
+                      className="w-full"
+                      rightIcon={<ObjectsIcon className="w-6 h-6" />}>Посмотреть объекты</Button>
+            </Link>
           </div>
         </section>
       </div>

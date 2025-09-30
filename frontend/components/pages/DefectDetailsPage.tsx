@@ -21,7 +21,7 @@ const DefectDetailsPage: React.FC<DefectDetailsPageProps> = ({
   const defect = (
     defectId === null
       ? undefined
-      : mockedDefects.find(organization => organization.id === Number(defectId))
+      : mockedDefects.find(obj => obj.id === Number(defectId))
   );
 
   if (defect === undefined) {
