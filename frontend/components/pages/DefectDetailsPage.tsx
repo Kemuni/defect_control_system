@@ -40,7 +40,7 @@ const DefectDetailsPage: React.FC<DefectDetailsPageProps> = ({
           className="relative w-1/2 h-[400px]">
           <ImageWithPlaceholder src={defect.imageUrl} alt="Фото дефекта"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                fill className="object-cover" />
+                                fill className="object-cover rounded-br-md" />
         </div>
         <section className="w-1/2 flex flex-col py-3 gap-2 justify-start">
           {

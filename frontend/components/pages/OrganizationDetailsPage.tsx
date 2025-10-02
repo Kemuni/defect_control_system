@@ -43,7 +43,7 @@ const OrganizationDetailsPage: React.FC<OrganizationDetailsPageProps> = ({
           className="relative w-1/2 h-[350px]">
           <ImageWithPlaceholder src={organization.logoUrl} alt="Лого организации"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                fill className="object-cover" />
+                                fill className="object-cover rounded-br-md" />
         </div>
         <section className="w-1/2 flex flex-col py-3 gap-2 justify-start">
           <Typography variant="title1" weight="medium" className="text-secondary-hint text-ellipsis overflow-hidden">

@@ -1,5 +1,5 @@
 "use client";
-import React, {FC} from "react";
+import React from "react";
 import {cn} from "@/lib/utils";
 import {Typography} from "@/components/Typography";
 import Link from "next/link";
@@ -8,11 +8,9 @@ import PlusIcon from "@/components/icons/PlusIcon";
 import Input from "@/components/Input";
 import SearchIcon from "@/components/icons/SearchIcon";
 import FilterIcon from "@/components/icons/FilterIcon";
-import ArrowIcon from "@/components/icons/ArrowIcon";
-import {DefectStatus, mockedDefects} from "@/types/Defect";
+import {mockedDefects} from "@/types/Defect";
 import {useSearchParams} from "next/navigation";
-import {DefectStatusBadge} from "@/components/DefectStatusBadge";
-import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
+import {DefectCard} from "@/components/Card";
 
 export type DefectsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -56,7 +54,7 @@ const DefectsPage: React.FC<DefectsPageProps> = ({
           {
             mockedDefects.map(defect => (
               <DefectCard key={defect.id}
-                          defectId={defect.id.toString()}
+                          href={{ query: {defectId: defect.id} }}
                           {...defect}
                           isSelected={defect.id.toString() === selectedDefectId} />
             ))
@@ -77,72 +75,3 @@ const DefectsPage: React.FC<DefectsPageProps> = ({
   );
 };
 export default DefectsPage;
-
-
-interface DefectCardProps {
-  defectId: string;
-  title: string;
-  imageUrl: string;
-  status: DefectStatus;
-  isCritical: boolean;
-  isSelected?: boolean;
-  description: string;
-  createdAt: Date;
-}
-
-const DefectCard: FC<DefectCardProps> = (
-  { defectId, status, title, imageUrl, description, createdAt, isCritical = false, isSelected = false}) =>
-{
-
-  return (
-    <Link
-      href={{
-        pathname: '/defects',
-        query: {defectId}
-      }}
-      className={cn(
-        "relative flex justify-between gap-2 w-full h-[100px] bg-white rounded-md overflow-hidden duration-200 " +
-        "hover:brightness-95 hover:scale-[100.5%]",
-        isSelected && "border border-hint/75 shadow-sm"
-      )}
-    >
-      {
-        isCritical && (
-          <Typography variant="subheadline" weight="light"
-                      className="z-10 w-fit absolute top-1 left-1 rounded-md bg-red-accent text-white px-1 py-0.5">
-            Критично
-          </Typography>
-        )
-      }
-      <div className="relative w-[100px] h-[100px] shrink-0">
-        <ImageWithPlaceholder hidePlaceholderText src={imageUrl} alt="Фото дефекта"
-                              sizes="(max-width: 768px) 25vw, (max-width: 1200px) 15vw, 10vw"
-                              fill className="object-cover" />
-      </div>
-      <div className="min-w-0 flex-1 flex justify-between gap-1 items-center me-2">
-        <section className="min-w-0 flex-1 flex flex-col gap-1 py-2">
-          <Typography variant="title4" weight="medium"
-                      className="text-nowrap text-ellipsis overflow-hidden">
-            {title}
-          </Typography>
-          <article className="flex flex-col gap-0">
-            <Typography variant="subheadline" weight="light"
-                        className="text-hint text-nowrap text-ellipsis overflow-hidden">
-              {description}
-            </Typography>
-            <Typography variant="subheadline" weight="light"
-                        className="text-hint">
-              Создан { createdAt.toLocaleDateString('ru-RU', { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }
-            </Typography>
-          </article>
-        </section>
-        <div className="ps-2 flex-0 flex gap-1 items-center justify-end">
-          <DefectStatusBadge status={status}/>
-          <Button variant="plain" size="sm" rightIcon={<ArrowIcon className="w-5 h-5" />}>
-            Открыть
-          </Button>
-        </div>
-      </div>
-    </Link>
-  );
-}

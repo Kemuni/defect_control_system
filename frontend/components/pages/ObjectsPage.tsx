@@ -1,19 +1,19 @@
 "use client";
-import React, {FC} from "react";
+import React from "react";
 import {Typography} from "@/components/Typography";
 import {Button} from "@/components/Button";
 import PlusIcon from "@/components/icons/PlusIcon";
 import Input from "@/components/Input";
 import SearchIcon from "@/components/icons/SearchIcon";
 import FilterIcon from "@/components/icons/FilterIcon";
-import {cn, getRussianWord} from "@/lib/utils";
+import {cn} from "@/lib/utils";
 import Link from "next/link";
 import {mockedOrganizations} from "@/types/Organization";
-import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
 import OrganizationIcon from "@/components/icons/OrganizationIcon";
 import ArrowIcon from "@/components/icons/ArrowIcon";
-import {usePathname, useSearchParams} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import {mockedObjects} from "@/types/Object";
+import {ObjectCard} from "@/components/Card";
 
 
 export interface ObjectsPageProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -88,8 +88,8 @@ const ObjectsPage: React.FC<ObjectsPageProps> = (
             mockedObjects.map(object => (
               <ObjectCard
                 key={object.id}
+                href={{ query: {objectId: object.id} }}
                 isSelected={object.id === Number(selectedObjectId)}
-                objectId={object.id}
                 title={object.title}
                 defectsCount={object.defectsCount}
                 imageUrl={object.imageUrl}
@@ -114,63 +114,3 @@ const ObjectsPage: React.FC<ObjectsPageProps> = (
 };
 
 export default ObjectsPage;
-
-
-interface ObjectCardProps {
-  objectId: number;
-  title: string;
-  defectsCount: number;
-  imageUrl: string;
-  isSelected?: boolean;
-  createdAt: Date;
-}
-
-const ObjectCard: FC<ObjectCardProps> = (
-  { objectId, title, imageUrl, defectsCount, createdAt, isSelected = false}) =>
-{
-  const pathname = usePathname();
-  return (
-    <Link
-      href={{
-        pathname: pathname,
-        query: {objectId: objectId},
-      }}
-      className={cn(
-        "flex gap-2 w-full bg-white rounded-md overflow-hidden duration-200 " +
-        "hover:brightness-95 hover:scale-[100.5%]",
-        isSelected && "ring-2 ring-hint/75 shadow-sm"
-      )}
-    >
-      <div className="relative w-[100px] h-[100px]">
-        <ImageWithPlaceholder hidePlaceholderText src={imageUrl} alt="Логотип организации"
-                              sizes="(max-width: 768px) 25vw, (max-width: 1200px) 15vw, 10vw"
-                              fill className="object-cover" />
-      </div>
-      <section className="flex-1 flex flex-col gap-1 justify-center py-2">
-        <Typography variant="title4" weight="medium"
-                    className="text-nowrap text-ellipsis overflow-hidden">
-          {title}
-        </Typography>
-        <article className="flex flex-col gap-0">
-          <Typography variant="subheadline" weight="light"
-                      className={defectsCount === 0 ? "text-hint" : "text-red-accent"}
-          >
-            {
-              defectsCount === 0
-                ? "Нет дефектов"
-                : `${defectsCount} ${getRussianWord(defectsCount, ["дефект", "дефекта", "дефектов"])}`
-            }
-          </Typography>
-          <Typography variant="subheadline" weight="light" className="text-hint">
-            Создан { createdAt.toLocaleDateString('ru-RU', { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }
-          </Typography>
-        </article>
-      </section>
-      <div className="ps-2 flex-0 flex gap-1 items-center justify-end me-2">
-        <Button variant="plain" size="sm" rightIcon={<ArrowIcon className="w-5 h-5" />}>
-          Открыть
-        </Button>
-      </div>
-    </Link>
-  );
-}
