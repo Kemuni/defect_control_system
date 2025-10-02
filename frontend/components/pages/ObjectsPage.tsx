@@ -14,6 +14,7 @@ import ArrowIcon from "@/components/icons/ArrowIcon";
 import {useSearchParams} from "next/navigation";
 import {mockedObjects} from "@/types/Object";
 import {ObjectCard} from "@/components/Card";
+import PagePlaceHolder from "@/components/PagePlaceHolder";
 
 
 export interface ObjectsPageProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -29,18 +30,7 @@ const ObjectsPage: React.FC<ObjectsPageProps> = (
   const organization = mockedOrganizations.find(organization => organization.id === organizationId);
 
   if (organization === undefined) {
-    return (
-      <div
-        className={cn(
-          "flex flex-col flex-1 items-center justify-center text-secondary-hint",
-          className
-        )}
-        {...props}
-      >
-        <OrganizationIcon className="w-12 h-12"/>
-        <Typography variant="title2" weight="medium" className="text-inherit">Организация не найдена</Typography>
-      </div>
-    );
+    return (<PagePlaceHolder text="Организация не найдена" icon={OrganizationIcon} />);
   }
 
   return (

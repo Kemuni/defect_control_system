@@ -36,7 +36,7 @@ const OrganizationsPage: React.FC<OrganizationsPageProps> = (
                         weight="medium"
                         className="underline text-hint hover:text-secondary-hint transition-colors"
             >
-              Дефекты
+              Все дефекты
             </Typography>
           </Link>
         </div>

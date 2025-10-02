@@ -11,33 +11,53 @@ import FilterIcon from "@/components/icons/FilterIcon";
 import {mockedDefects} from "@/types/Defect";
 import {useSearchParams} from "next/navigation";
 import {DefectCard} from "@/components/Card";
+import {mockedOrganizations} from "@/types/Organization";
+import OrganizationIcon from "@/components/icons/OrganizationIcon";
+import PagePlaceHolder from "@/components/PagePlaceHolder";
 
-export type DefectsPageProps = React.HTMLAttributes<HTMLDivElement>
+export interface DefectsPageProps extends React.HTMLAttributes<HTMLDivElement> {
+  organizationId?: number;
+}
 
 const DefectsPage: React.FC<DefectsPageProps> = ({
-    className, ...props
+    organizationId, className, ...props
   }) => {
   const searchParams = useSearchParams();
   const selectedDefectId = searchParams.get('defectId');
+
+  const selectedOrganization = mockedOrganizations.find(
+    organization => organization.id === organizationId
+  );
+
+  if (organizationId !== undefined && selectedOrganization === undefined) {
+    return (<PagePlaceHolder text="Организация не найдена" icon={OrganizationIcon} />);
+  }
 
   return (
     <div className={cn("flex flex-col gap-2.5 w-full h-full", className)} {...props}>
       <div className="flex justify-between w-full items-center">
         <div className="flex gap-1 items-baseline">
-          <Typography variant="title1" weight="medium" className="text-secondary-hint">
-            Все дефекты
-          </Typography>
+          <Link
+            href={ organizationId === undefined ? `/organizations` :
+              { pathname: '/organizations', query: {organizationId: selectedOrganization!.id} }
+            }
+          >
+            <Typography variant="title3"
+                        weight="medium"
+                        className={cn(
+                          "underline text-hint hover:text-secondary-hint transition-colors",
+                          "text-ellipsis overflow-hidden whitespace-nowrap",
+                        )}
+            >
+              { organizationId === undefined ? 'Все организации' : selectedOrganization!.title }
+            </Typography>
+          </Link>
           <Typography variant="title3" weight="medium" className="text-hint">
             /
           </Typography>
-          <Link href={"/organizations"}>
-            <Typography variant="title3"
-                        weight="medium"
-                        className="underline text-hint hover:text-secondary-hint transition-colors"
-            >
-              Организации
-            </Typography>
-          </Link>
+          <Typography variant="title1" weight="medium" className="text-secondary-hint">
+            { organizationId === undefined ? 'Все дефекты' : 'Дефекты' }
+          </Typography>
         </div>
         <Link href={"/defects/create"}>
           <Button variant="white" size="sm" leftIcon={<PlusIcon className="w-5 h-5" />}>Создать дефект</Button>
