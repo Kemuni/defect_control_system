@@ -2,35 +2,25 @@
 import React, {useEffect, useState} from "react";
 import {cn, timeAgoString} from "@/lib/utils";
 import {Typography} from "@/components/Typography";
-import {useSearchParams} from "next/navigation";
-import DefectIcon from "@/components/icons/DefectIcon";
-import Defect, {mockedDefects} from "@/types/Defect";
+import Defect from "@/types/Defect";
 import {Button} from "@/components/Button";
 import RepairIcon from "@/components/icons/RepairIcon";
 import {DefectStatusBadge} from "@/components/DefectStatusBadge";
 import EmployeeCard from "@/components/EmployeeCard";
 import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
+import {useDefect} from "@/hooks/useEntityFactory";
+import PagePlaceHolder from "@/components/PagePlaceHolder";
+import DefectIcon from "@/components/icons/DefectIcon";
 
 export type DefectDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
 const DefectDetailsPage: React.FC<DefectDetailsPageProps> = ({
     className, ...props
   }) => {
-  const searchParams = useSearchParams();
-  const defectId = searchParams.get('defectId');
-  const defect = (
-    defectId === null
-      ? undefined
-      : mockedDefects.find(obj => obj.id === Number(defectId))
-  );
+  const { defect, defectError } = useDefect();
 
-  if (defect === undefined) {
-    return (
-      <div className={cn("flex flex-col flex-1 items-center justify-center", className)} {...props}>
-        <DefectIcon className="w-12 h-12 text-hint"/>
-        <Typography variant="title2" weight="medium" className="text-hint">Выберите дефект</Typography>
-      </div>
-    );
+  if (defectError || !defect) {
+    return (<PagePlaceHolder text={ defectError || "Выберите дефект" } icon={ DefectIcon } />);
   }
 
   return (

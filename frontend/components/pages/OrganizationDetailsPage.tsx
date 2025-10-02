@@ -7,33 +7,24 @@ import ObjectsIcon from "@/components/icons/ObjectsIcon";
 import SearchIcon from "@/components/icons/SearchIcon";
 import RepairIcon from "@/components/icons/RepairIcon";
 import {cn, getRussianWord} from "@/lib/utils";
-import {useSearchParams} from "next/navigation";
 import OrganizationIcon from "@/components/icons/OrganizationIcon";
-import Organization, {mockedOrganizations} from "@/types/Organization";
+import Organization from "@/types/Organization";
 import EmployeeCard from "@/components/EmployeeCard";
 import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
 import Link from "next/link";
+import SideTabs from "@/types/SideTabs";
+import {useOrganization} from "@/hooks/useEntityFactory";
+import PagePlaceHolder from "@/components/PagePlaceHolder";
 
 export type OrganizationDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
 const OrganizationDetailsPage: React.FC<OrganizationDetailsPageProps> = ({
   className, ...props
 }) => {
-  const searchParams = useSearchParams();
-  const organizationId = searchParams.get('organizationId');
-  const organization = (
-    organizationId === null
-      ? undefined
-      : mockedOrganizations.find(organization => organization.id === Number(organizationId))
-  );
+  const { organization, organizationError } = useOrganization();
 
-  if (organization === undefined) {
-    return (
-      <div className={cn("flex flex-col flex-1 items-center justify-center", className)} {...props}>
-        <OrganizationIcon className="w-12 h-12 text-hint"/>
-        <Typography variant="title2" weight="medium" className="text-hint">Выберите организацию</Typography>
-      </div>
-    );
+  if (organizationError || !organization) {
+    return (<PagePlaceHolder text={organizationError || "Выберите организацию"} icon={OrganizationIcon} />);
   }
 
   return (
@@ -52,12 +43,12 @@ const OrganizationDetailsPage: React.FC<OrganizationDetailsPageProps> = ({
           <OrganizationDataTable organization={organization} />
 
           <div className="flex flex-col gap-2 mt-auto">
-            <Link href={`/organizations/${organization.id}/defects`}>
+            <Link href={{ query: { organizationId: organization.id, tab: SideTabs.Defects }}}>
               <Button variant="primary" size="md"
                       className="w-full"
                       rightIcon={<DefectIcon className="w-6 h-6" />}>Открыть дефекты</Button>
             </Link>
-            <Link href={`/organizations/${organization.id}/objects`}>
+            <Link href={{ query: { organizationId: organization.id, tab: SideTabs.Objects }}}>
               <Button variant="gray" size="md"
                       className="w-full"
                       rightIcon={<ObjectsIcon className="w-6 h-6" />}>Посмотреть объекты</Button>

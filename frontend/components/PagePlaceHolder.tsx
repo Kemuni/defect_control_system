@@ -14,7 +14,7 @@ const PagePlaceHolder: React.FC<PlaceHolderProps> = ({className, text, icon: Ico
   return (
     <div
       className={cn(
-        "flex flex-col flex-1 items-center justify-center text-secondary-hint",
+        "flex flex-col flex-1 items-center justify-center text-hint",
         className
       )}
       {...props}

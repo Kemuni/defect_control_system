@@ -25,7 +25,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = (
       onClick={() => toast(`Переход на страницу сотрудника ID:${employeeId}`)}
     >
       <div className="w-7.5 h-7.5 bg-hint rounded-full"/>
-      <Typography variant="headline" weight="regular" className="text-inherit">
+      <Typography variant="headline" weight="regular" className="text-inherit text-nowrap">
         { getInitials({surname, name, patronymic}) }
       </Typography>
     </div>

@@ -8,9 +8,9 @@ import SearchIcon from "@/components/icons/SearchIcon";
 import FilterIcon from "@/components/icons/FilterIcon";
 import {cn, getInitials} from "@/lib/utils";
 import Link from "next/link";
-import {useSearchParams} from "next/navigation";
 import {mockedOrganizations} from "@/types/Organization";
 import {OrganizationCard} from "@/components/Card";
+import {useOrganization} from "@/hooks/useEntityFactory";
 
 
 export type OrganizationsPageProps = React.HTMLAttributes<HTMLDivElement>
@@ -18,8 +18,7 @@ export type OrganizationsPageProps = React.HTMLAttributes<HTMLDivElement>
 const OrganizationsPage: React.FC<OrganizationsPageProps> = (
   {className, ...props}
 ) => {
-  const searchParams = useSearchParams();
-  const organizationId = searchParams.get('organizationId');
+  const { organizationId, createOrganizationUrl, getSelectedOrganizationUrl } = useOrganization();
 
   return (
     <div className={cn("flex flex-col gap-2.5 w-full h-full", className)} {...props}>
@@ -40,7 +39,7 @@ const OrganizationsPage: React.FC<OrganizationsPageProps> = (
             </Typography>
           </Link>
         </div>
-        <Link href={"/organizations/create"}>
+        <Link href={ createOrganizationUrl }>
           <Button variant="white" size="sm" leftIcon={<PlusIcon className="w-5 h-5" />}>Создать организацию</Button>
         </Link>
       </div>
@@ -53,19 +52,19 @@ const OrganizationsPage: React.FC<OrganizationsPageProps> = (
         <Typography variant="subheadline" weight="light" className="text-hint">Найдено 3 организации</Typography>
         <div className="flex flex-col gap-2">
           {
-            mockedOrganizations.map((organization) => (
+            mockedOrganizations.map((org) => (
               <OrganizationCard
-                key={organization.id}
-                href={{ query: {organizationId: organization.id} }}
-                logoUrl={organization.logoUrl}
-                isSelected={organization.id.toString() === organizationId}
-                title={organization.title}
-                description={`${organization.amountOfObjects} объектов, ${organization.amountOfEmployees} сотрудников`}
-                ownerInitials={getInitials(organization.ownerEmployee)}
+                key={org.id}
+                href={ getSelectedOrganizationUrl(org.id) }
+                logoUrl={org.logoUrl}
+                isSelected={org.id === organizationId}
+                title={org.title}
+                description={`${org.amountOfObjects} объектов, ${org.amountOfEmployees} сотрудников`}
+                ownerInitials={getInitials(org.ownerEmployee)}
               />
             ))
           }
-          <Link href={{pathname: '/organizations/create'}}>
+          <Link href={ createOrganizationUrl }>
             <Button
                 variant="white"
                 size="md"

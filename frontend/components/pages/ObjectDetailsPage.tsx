@@ -2,35 +2,25 @@
 import React from "react";
 import {cn, getRussianWord, timeAgoString} from "@/lib/utils";
 import {Typography} from "@/components/Typography";
-import {useSearchParams} from "next/navigation";
 import DefectIcon from "@/components/icons/DefectIcon";
 import {Button} from "@/components/Button";
 import EmployeeCard from "@/components/EmployeeCard";
 import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
-import Object, {mockedObjects} from "@/types/Object";
-import ObjectsIcon from "@/components/icons/ObjectsIcon";
+import Object from "@/types/Object";
 import Link from "next/link";
+import {useObject} from "@/hooks/useEntityFactory";
+import PagePlaceHolder from "@/components/PagePlaceHolder";
+import ObjectsIcon from "@/components/icons/ObjectsIcon";
 
 export type ObjectDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
 const ObjectDetailsPage: React.FC<ObjectDetailsPageProps> = (
   { className, ...props }
 ) => {
-  const searchParams = useSearchParams();
-  const objectId = searchParams.get('objectId');
-  const object = (
-    objectId === null
-      ? undefined
-      : mockedObjects.find(obj => obj.id === Number(objectId))
-  );
+  const { object, objectId, objectError } = useObject();
 
-  if (object === undefined) {
-    return (
-      <div className={cn("flex flex-col flex-1 items-center justify-center", className)} {...props}>
-        <ObjectsIcon className="w-12 h-12 text-hint"/>
-        <Typography variant="title2" weight="medium" className="text-hint">Выберите объект</Typography>
-      </div>
-    );
+  if (objectError || objectId === null || !object) {
+    return (<PagePlaceHolder text={ objectError || "Выберите объект" } icon={ ObjectsIcon } />);
   }
 
   return (
@@ -66,7 +56,7 @@ const ObjectDetailsPage: React.FC<ObjectDetailsPageProps> = (
 
           <div className="flex flex-col gap-2 mt-auto">
             <Link href={{
-              pathname: `/organizations/${object.organizationId}/defects`,
+              pathname: `/defects`,
               query: {
                 objectId: object.id,
               }

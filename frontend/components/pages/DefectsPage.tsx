@@ -9,28 +9,21 @@ import Input from "@/components/Input";
 import SearchIcon from "@/components/icons/SearchIcon";
 import FilterIcon from "@/components/icons/FilterIcon";
 import {mockedDefects} from "@/types/Defect";
-import {useSearchParams} from "next/navigation";
 import {DefectCard} from "@/components/Card";
-import {mockedOrganizations} from "@/types/Organization";
-import OrganizationIcon from "@/components/icons/OrganizationIcon";
 import PagePlaceHolder from "@/components/PagePlaceHolder";
+import ErrorIcon from "@/components/icons/ErrorIcon";
+import {useDefect, useOrganization} from "@/hooks/useEntityFactory";
 
-export interface DefectsPageProps extends React.HTMLAttributes<HTMLDivElement> {
-  organizationId?: number;
-}
+export type DefectsPageProps = React.HTMLAttributes<HTMLDivElement>
 
 const DefectsPage: React.FC<DefectsPageProps> = ({
-    organizationId, className, ...props
+    className, ...props
   }) => {
-  const searchParams = useSearchParams();
-  const selectedDefectId = searchParams.get('defectId');
+  const { organization, organizationError } = useOrganization();
+  const { defectId, createDefectUrl, getSelectedDefectUrl } = useDefect();
 
-  const selectedOrganization = mockedOrganizations.find(
-    organization => organization.id === organizationId
-  );
-
-  if (organizationId !== undefined && selectedOrganization === undefined) {
-    return (<PagePlaceHolder text="Организация не найдена" icon={OrganizationIcon} />);
+  if (organizationError) {
+    return (<PagePlaceHolder text={organizationError} icon={ErrorIcon} />);
   }
 
   return (
@@ -38,8 +31,10 @@ const DefectsPage: React.FC<DefectsPageProps> = ({
       <div className="flex justify-between w-full items-center">
         <div className="flex gap-1 items-baseline">
           <Link
-            href={ organizationId === undefined ? `/organizations` :
-              { pathname: '/organizations', query: {organizationId: selectedOrganization!.id} }
+            href={
+            organization === undefined
+              ? `/organizations`
+              : { pathname: '/organizations', query: {organizationId: organization.id} }
             }
           >
             <Typography variant="title3"
@@ -49,18 +44,20 @@ const DefectsPage: React.FC<DefectsPageProps> = ({
                           "text-ellipsis overflow-hidden whitespace-nowrap",
                         )}
             >
-              { organizationId === undefined ? 'Все организации' : selectedOrganization!.title }
+              { organization === undefined ? 'Все организации' : organization.title }
             </Typography>
           </Link>
           <Typography variant="title3" weight="medium" className="text-hint">
             /
           </Typography>
           <Typography variant="title1" weight="medium" className="text-secondary-hint">
-            { organizationId === undefined ? 'Все дефекты' : 'Дефекты' }
+            { organization === undefined ? 'Все дефекты' : 'Дефекты' }
           </Typography>
         </div>
-        <Link href={"/defects/create"}>
-          <Button variant="white" size="sm" leftIcon={<PlusIcon className="w-5 h-5" />}>Создать дефект</Button>
+        <Link href={ createDefectUrl }>
+          <Button variant="white" size="sm" leftIcon={<PlusIcon className="w-5 h-5" />}>
+            Создать дефект
+          </Button>
         </Link>
       </div>
       <div className="flex flex-col gap-2.5 ps-4">
@@ -74,12 +71,12 @@ const DefectsPage: React.FC<DefectsPageProps> = ({
           {
             mockedDefects.map(defect => (
               <DefectCard key={defect.id}
-                          href={{ query: {defectId: defect.id} }}
+                          href={getSelectedDefectUrl(defect.id)}
                           {...defect}
-                          isSelected={defect.id.toString() === selectedDefectId} />
+                          isSelected={defect.id === defectId} />
             ))
           }
-          <Link href={{pathname: '/defects/create'}}>
+          <Link href={ createDefectUrl }>
             <Button
               variant="white"
               size="md"

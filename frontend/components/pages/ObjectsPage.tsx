@@ -8,29 +8,24 @@ import SearchIcon from "@/components/icons/SearchIcon";
 import FilterIcon from "@/components/icons/FilterIcon";
 import {cn} from "@/lib/utils";
 import Link from "next/link";
-import {mockedOrganizations} from "@/types/Organization";
-import OrganizationIcon from "@/components/icons/OrganizationIcon";
 import ArrowIcon from "@/components/icons/ArrowIcon";
-import {useSearchParams} from "next/navigation";
 import {mockedObjects} from "@/types/Object";
 import {ObjectCard} from "@/components/Card";
 import PagePlaceHolder from "@/components/PagePlaceHolder";
+import ErrorIcon from "@/components/icons/ErrorIcon";
+import {useObject, useOrganization} from "@/hooks/useEntityFactory";
 
 
-export interface ObjectsPageProps extends React.HTMLAttributes<HTMLDivElement> {
-  organizationId: number;
-}
+export type ObjectsPageProps = React.HTMLAttributes<HTMLDivElement>
 
 const ObjectsPage: React.FC<ObjectsPageProps> = (
-  {className, organizationId, ...props}
+  {className, ...props}
 ) => {
-  const searchParams = useSearchParams();
-  const selectedObjectId = searchParams.get('objectId');
+  const { organization, organizationError } = useOrganization();
+  const { objectId, getSelectedObjectUrl, createObjectUrl } = useObject();
 
-  const organization = mockedOrganizations.find(organization => organization.id === organizationId);
-
-  if (organization === undefined) {
-    return (<PagePlaceHolder text="Организация не найдена" icon={OrganizationIcon} />);
+  if ( organizationError || !organization ) {
+    return (<PagePlaceHolder text={ organizationError || "Организация не найдена" } icon={ ErrorIcon } />);
   }
 
   return (
@@ -62,7 +57,7 @@ const ObjectsPage: React.FC<ObjectsPageProps> = (
             Объекты
           </Typography>
         </div>
-        <Link href={`/organizations/${organizationId}/objects/create`}>
+        <Link href={createObjectUrl}>
           <Button variant="white" size="sm" leftIcon={<PlusIcon className="w-5 h-5" />}>Добавить</Button>
         </Link>
       </div>
@@ -75,19 +70,19 @@ const ObjectsPage: React.FC<ObjectsPageProps> = (
         <Typography variant="subheadline" weight="light" className="text-hint">Найдено 3 объекта</Typography>
         <div className="flex flex-col gap-2">
           {
-            mockedObjects.map(object => (
+            mockedObjects.map(obj => (
               <ObjectCard
-                key={object.id}
-                href={{ query: {objectId: object.id} }}
-                isSelected={object.id === Number(selectedObjectId)}
-                title={object.title}
-                defectsCount={object.defectsCount}
-                imageUrl={object.imageUrl}
-                createdAt={object.createdAt}
+                key={obj.id}
+                href={getSelectedObjectUrl(obj.id)}
+                isSelected={obj.id === objectId}
+                title={obj.title}
+                defectsCount={obj.defectsCount}
+                imageUrl={obj.imageUrl}
+                createdAt={obj.createdAt}
               />
             ))
           }
-          <Link href={`/organizations/${organizationId}/objects/create`}>
+          <Link href={createObjectUrl}>
             <Button
               variant="white"
               size="md"

@@ -1,10 +1,11 @@
-import OrganizationDetailsPage from "@/components/pages/OrganizationDetailsPage";
-import React, {Suspense} from "react";
+import SideTabs from "@/types/SideTabs";
+import {Suspense} from "react";
+import RightSideRouteHandler from "@/components/route-handlers/RightSideRouteHandler";
 
-export default async function DefaultPage() {
+export default function Page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <OrganizationDetailsPage />
+      <RightSideRouteHandler defaultTab={SideTabs.Organizations} />
     </Suspense>
   );
 }
