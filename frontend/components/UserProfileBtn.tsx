@@ -1,29 +1,47 @@
 "use client";
-import {FC, useState} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import {Typography} from "@/components/Typography";
 import ChevronIcon from "@/components/icons/ChevronIcon";
 import {Button} from "@/components/Button";
 import UserIcon from "@/components/icons/UserIcon";
 import StaffIcon from "@/components/icons/StaffIcon";
 import ExitIcon from "@/components/icons/ExitIcon";
-import {cn} from "@/lib/utils";
+import {cn, getInitials} from "@/lib/utils";
 
 interface UserProfileBtnProps {
   name: string;
   surname: string;
-  patronymic: string;
+  patronymic?: string;
 }
 
 const UserProfileBtn: FC<UserProfileBtnProps> = ({name, surname, patronymic}) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Обработчик клика вне компонента
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
-    <div className="relative w-fit">
+    <div className="relative w-fit" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex gap-1.5 items-center p-3.5 py-1.5 rounded-full cursor-pointer transition-colors hover:bg-light-background">
         <div className="w-7.5 h-7.5 bg-hint rounded-full"/>
-        <Typography variant="title4">{surname} {name[0]}. {patronymic[0]}.</Typography>
+        <Typography variant="title4">{ getInitials({ surname, name, patronymic })}</Typography>
         <ChevronIcon className="rotate-180 w-5 h-5"/>
       </button>
       <div
@@ -35,8 +53,8 @@ const UserProfileBtn: FC<UserProfileBtnProps> = ({name, surname, patronymic}) =>
         <div className="flex gap-1.5 items-center mb-2">
           <div className="w-10 h-10 bg-hint rounded-full"/>
           <div>
-            <Typography variant="title4" weight="medium">{surname}</Typography>
-            <Typography variant="text">{name} {patronymic}</Typography>
+            <Typography variant="title4" weight="medium">{ surname }</Typography>
+            <Typography variant="text">{ name } { patronymic && "" }</Typography>
           </div>
         </div>
 
