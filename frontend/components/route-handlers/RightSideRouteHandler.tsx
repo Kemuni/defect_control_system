@@ -41,7 +41,7 @@ const renderDefectPage = (action: string | null): React.ReactNode => {
     case QueryActions.Create:
       return <CreateDefectPage className="py-3 pl-6" />;
     case QueryActions.Edit:
-      return <div>Редактирование</div>;
+      return <CreateDefectPage className="py-3 pl-6" />;
     case QueryActions.CreateDefectSolution:
       return <div>Решение дефекта</div>;
     default:

@@ -1,14 +1,16 @@
 import React from "react";
 import {cn} from "@/lib/utils";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  placeholder: string;
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  placeholder?: string;
   suffix?: React.ReactNode;
+  hasError?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({className, suffix, ...props}, ref) => {
-    return(
+  ({className, suffix, hasError = false, ...props}, ref) => {
+
+    return (
       <div className="relative group w-full">
         <input
           ref={ref as never}
@@ -16,6 +18,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             "w-full px-3 py-1.5 bg-white border border-hint/50 rounded-full text-base focus:outline-none",
             "focus:border-secondary-hint",
             "placeholder:text-hint placeholder:italic placeholder:font-light",
+            hasError && "border-red-accent focus:border-red-accent",
             suffix && "pr-10",
             className
           )}
@@ -25,7 +28,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <div className={cn(
             "absolute w-fit h-full bg-light-background right-0 top-0 flex items-center justify-center",
             "px-2 rounded-e-full border border-hint/50 text-hint",
-            "group-focus-within:border-secondary-hint"
+            "group-focus-within:border-secondary-hint",
+            hasError && "border-red-accent",
           )}>
             {suffix}
           </div>
@@ -40,10 +44,11 @@ export default Input;
 
 interface TextAreaProps extends React.InputHTMLAttributes<HTMLTextAreaElement> {
   placeholder: string;
+  hasError?: boolean;
 }
 
 export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({className, ...props}, ref) => {
+  ({className, hasError, ...props}, ref) => {
     return(
       <textarea
         ref={ref as never}
@@ -51,6 +56,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           "w-full min-h-20 max-h-44 px-3 py-1.5 bg-white border border-hint/50 rounded-md text-base focus:outline-none",
           "focus:border-secondary-hint",
           "placeholder:text-hint placeholder:italic placeholder:font-light",
+          hasError && "border-red-accent",
           className
         )}
         {...props}

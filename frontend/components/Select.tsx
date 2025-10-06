@@ -32,13 +32,14 @@ function useSelect(): SelectContextType {
   return context;
 }
 
-interface SelectProps {
+export interface SelectProps {
   value?: string;
   placeholder?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   children: ReactNode;
   className?: string;
+  hasError?: boolean;
 }
 
 export const Select=  React.forwardRef<HTMLDivElement, SelectProps>(
@@ -47,6 +48,7 @@ export const Select=  React.forwardRef<HTMLDivElement, SelectProps>(
      defaultValue = '',
      onValueChange,
      children,
+     hasError = false,
      className
    }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
@@ -94,6 +96,7 @@ export const Select=  React.forwardRef<HTMLDivElement, SelectProps>(
         'relative w-full',
         'rounded-md bg-light-background border border-hint/50 transition-colors',
         'hover:border-hint',
+        hasError && "border-red-accent",
         className
       )}>
         <SelectTrigger>

@@ -11,6 +11,7 @@ import ImageWithPlaceholder from "@/components/ImageWithPlaceholder";
 import {useDefect} from "@/hooks/useEntityFactory";
 import PagePlaceHolder from "@/components/PagePlaceHolder";
 import DefectIcon from "@/components/icons/DefectIcon";
+import Link from "next/link";
 
 export type DefectDetailsPageProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -88,9 +89,11 @@ const DefectDetailsPage: React.FC<DefectDetailsPageProps> = ({
           <Button variant="primary" size="md" rightIcon={<RepairIcon className="w-6 h-6" />}>
             Отметить исправленным
           </Button>
-          <Button variant="plain" size="md">
-            Изменить дефект
-          </Button>
+          <Link href={'/defects?defectId=1&action=edit'}>
+            <Button variant="plain" size="md">
+              Изменить дефект
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
