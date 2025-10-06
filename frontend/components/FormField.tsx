@@ -16,7 +16,11 @@ const FormField: React.FC<FormFieldProps> = (
 ) => {
   return (
     <div className={cn("w-auto flex flex-col gap-1.5", className)} {...props}>
-      <Typography variant="title4">{ label }{ isRequired && "*"}</Typography>
+      {
+        label && (
+          <Typography variant="title4">{ label }{ isRequired && "*"}</Typography>
+        )
+      }
 
       {
         description && (

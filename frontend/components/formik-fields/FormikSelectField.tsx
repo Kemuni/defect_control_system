@@ -5,13 +5,13 @@ import {Select, SelectProps} from "@/components/Select";
 
 interface FormikSelectProps extends SelectProps {
   name: string;
-  label: string;
+  label?: string;
   required?: boolean;
   description?: string;
 }
 
 export const FormikSelect: React.FC<FormikSelectProps> = (
-  { name, label, required, description, children, ...props }
+  { name, label = '', required, description, children, ...props }
 ) => {
   const [field, meta, helpers] = useField(name);
 
