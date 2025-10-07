@@ -20,12 +20,12 @@ class MinIOClient:
         self._ensure_bucket()
     
     def _ensure_bucket(self):
-        """Ensure the bucket exists, create if not"""
+        """ Создание бакета если его нет """
         try:
             if not self.client.bucket_exists(self.bucket_name):
                 self.client.make_bucket(self.bucket_name)
                 
-                # Set public read policy for the bucket
+                # Делаем бакет публичным
                 policy = {
                     "Version": "2012-10-17",
                     "Statement": [
@@ -42,12 +42,10 @@ class MinIOClient:
             print(f"Error ensuring bucket: {e}")
     
     async def upload_file(self, file_data: bytes, filename: str, content_type: str = "application/octet-stream") -> str:
-        """Upload file to MinIO and return the URL"""
+        """ Асинхронно добавляем файл и возвращаем ссылку на него """
         try:
-            # Generate unique filename
             unique_filename = f"{uuid.uuid4()}_{filename}"
-            
-            # Upload file
+
             self.client.put_object(
                 self.bucket_name,
                 unique_filename,
@@ -55,20 +53,17 @@ class MinIOClient:
                 length=len(file_data),
                 content_type=content_type
             )
-            
-            # Return full URL
+
             protocol = "https" if settings.minio_secure else "http"
             return f"{protocol}://{settings.minio_endpoint}/{self.bucket_name}/{unique_filename}"
         except S3Error as e:
             raise Exception(f"Error uploading file: {e}")
     
     def upload_file_sync(self, file_data: bytes, filename: str, content_type: str = "application/octet-stream") -> str:
-        """Upload file to MinIO and return the URL (synchronous)"""
+        """ Синхронно добавляем файл и возвращаем ссылку на него """
         try:
-            # Generate unique filename
             unique_filename = f"{uuid.uuid4()}_{filename}"
-            
-            # Upload file
+
             self.client.put_object(
                 self.bucket_name,
                 unique_filename,
@@ -76,17 +71,16 @@ class MinIOClient:
                 length=len(file_data),
                 content_type=content_type
             )
-            
-            # Return full URL
+
             protocol = "https" if settings.minio_secure else "http"
             return f"{protocol}://{settings.minio_endpoint}/{self.bucket_name}/{unique_filename}"
         except S3Error as e:
             raise Exception(f"Error uploading file: {e}")
     
     def delete_file_sync(self, file_url: str) -> bool:
-        """Delete file from MinIO by URL (synchronous)"""
+        """ Синхронно удаляем файл """
         try:
-            # Extract object name from URL
+            # Извлекаем объект из ссылки
             object_name = file_url.split(f"/{self.bucket_name}/")[-1]
             self.client.remove_object(self.bucket_name, object_name)
             return True
@@ -95,9 +89,8 @@ class MinIOClient:
             return False
     
     async def delete_file(self, file_url: str) -> bool:
-        """Delete file from MinIO by URL"""
+        """ Асинхронно удаляем файл  """
         try:
-            # Extract object name from URL
             object_name = file_url.split(f"/{self.bucket_name}/")[-1]
             self.client.remove_object(self.bucket_name, object_name)
             return True
@@ -106,7 +99,6 @@ class MinIOClient:
             return False
     
     def get_file_url(self, object_name: str) -> str:
-        """Get presigned URL for file"""
         try:
             url = self.client.presigned_get_object(self.bucket_name, object_name)
             return url
